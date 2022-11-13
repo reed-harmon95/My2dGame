@@ -1,5 +1,7 @@
 package main;
 
+import Entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,7 +15,7 @@ public class GamePanel extends JPanel implements Runnable{
     //SCREEN SETTINGS
     final int originalTileSize = 16;                        //default tile size 16x16 pixels
     final int tileScale = 3;                                //scaling value to scale 16x16 images
-    final int tileSize = originalTileSize * tileScale;      //size of tiles in game (16x16 scaled to 48x48)
+    public final int tileSize = originalTileSize * tileScale;//size of tiles in game (16x16 scaled to 48x48), needed for player class
     final int maxScreenColumns = 16;                        //max number of tiles for width
     final int maxScreenRows = 12;                           //max number of tiles for height
     final int screenWidth = tileSize * maxScreenColumns;    //overall screen width in pixels
@@ -22,8 +24,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     // PLAYER DATA
     PlayerController playerController = new PlayerController();
-    int playerX = 100, playerY = 100, playerSpeed = 4;
-
+    Player player = new Player(this, playerController);
 
     int fps = 60;
     Thread gameThread;                                      //handles the gameplay loop
@@ -51,9 +52,9 @@ public class GamePanel extends JPanel implements Runnable{
     public void run() {
 
         //Setup for the time of the game loop
-        //tells how may times the cpu runs this loop per second (FPS)
+        //tells how many times the cpu runs this loop per second (FPS)
         //Delta/Accumulator method
-        double drawInterval = 1000000000 / fps;             //1 second / 60 fps
+        double drawInterval = 1000000000 / (float) fps;             //1 second / 60 fps
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -105,19 +106,9 @@ public class GamePanel extends JPanel implements Runnable{
     //handles the data on the screen
     public void update() {
 
-
         //Update the players position based on the keyboard input
-        //NOTE** X:0, Y:0 is top left of screen
-        //NOTE** Using else if statements does not allow for diagonal movement
-        if (playerController.isUpPressed()){
-            playerY -= playerSpeed;
-        } else if (playerController.isDownPressed()){
-            playerY += playerSpeed;
-        } else if (playerController.isLeftPressed()) {
-            playerX -= playerSpeed;
-        } else if (playerController.isRightPressed()) {
-            playerX += playerSpeed;
-        }
+        player.update();
+
     }
 
 
@@ -127,12 +118,11 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(graphics);
 
 
-        //set up instance of graphics2d to which includes some more functionality than regular graphics
+        //set up instance of graphics 2d which includes some more functionality than regular graphics
         Graphics2D graphics2D = (Graphics2D) graphics;
 
         //drawing sample character(white rectangle)
-        graphics2D.setColor(Color.white);
-        graphics2D.fillRect(playerX, playerY, tileSize, tileSize);
+        player.draw(graphics2D);
 
 
         //cleanup object once done drawing
