@@ -15,5 +15,8 @@ Currently implemented:
     
     11/13:
 
-             - Added walking animation for player
+             - Added player sprite and walking animation
 
+    11/14:
+
+             - Added tiles and tile manager to draw the background tiles to the screen

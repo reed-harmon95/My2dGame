@@ -1,6 +1,7 @@
 package main;
 
-import Entity.Player;
+import entity.Player;
+import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,19 +13,24 @@ import java.awt.*;
  */
 public class GamePanel extends JPanel implements Runnable{
 
-    //SCREEN SETTINGS
-    final int originalTileSize = 16;                        //default tile size 16x16 pixels
-    final int tileScale = 3;                                //scaling value to scale 16x16 images
-    public final int tileSize = originalTileSize * tileScale;//size of tiles in game (16x16 scaled to 48x48), needed for player class
-    final int maxScreenColumns = 16;                        //max number of tiles for width
-    final int maxScreenRows = 12;                           //max number of tiles for height
-    final int screenWidth = tileSize * maxScreenColumns;    //overall screen width in pixels
-    final int screenHeight = tileSize * maxScreenRows;      //overall screen height in pixels
+    //SCREEN SETTINGS ** Getters for certain fields at bottom **
+    private final int originalTileSize = 16;                        //default tile size 16x16 pixels
+    private final int tileScale = 3;                                //scaling value to scale 16x16 images
+    private final int tileSize = originalTileSize * tileScale;      //size of tiles in game (16x16 scaled to 48x48), needed for player class
+    private final int maxScreenColumns = 16;                        //max number of tiles for width
+    private final int maxScreenRows = 12;                           //max number of tiles for height
+    private final int screenWidth = tileSize * maxScreenColumns;    //overall screen width in pixels
+    private final int screenHeight = tileSize * maxScreenRows;      //overall screen height in pixels
+
 
 
     // PLAYER DATA
     PlayerController playerController = new PlayerController();
     Player player = new Player(this, playerController);
+
+
+    //BACKGROUND TILES
+    TileManager tileManager = new TileManager(this);
 
     int fps = 60;
     Thread gameThread;                                      //handles the gameplay loop
@@ -121,11 +127,39 @@ public class GamePanel extends JPanel implements Runnable{
         //set up instance of graphics 2d which includes some more functionality than regular graphics
         Graphics2D graphics2D = (Graphics2D) graphics;
 
-        //drawing sample character(white rectangle)
+
+        //drawing background tiles(map) to screen
+        //NOTE** This should be done before drawing the player character so the player character is on top of the tiles
+        tileManager.draw(graphics2D);
+
+
+        //drawing player character to screen
         player.draw(graphics2D);
 
 
         //cleanup object once done drawing
         graphics2D.dispose();
+    }
+
+
+    //GETTERS FOR FIELDS
+    public int getTileSize() {
+        return tileSize;
+    }
+
+    public int getMaxScreenColumns() {
+        return maxScreenColumns;
+    }
+
+    public int getMaxScreenRows() {
+        return maxScreenRows;
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
     }
 }
