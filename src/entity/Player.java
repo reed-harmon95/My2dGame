@@ -1,4 +1,4 @@
-package Entity;
+package entity;
 
 import main.GamePanel;
 import main.PlayerController;
@@ -144,7 +144,7 @@ public class Player extends Entity {
 
 
         //Finally, draw image to screen
-        graphics2D.drawImage(image, x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+        graphics2D.drawImage(image, x, y, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
     }
 
 
