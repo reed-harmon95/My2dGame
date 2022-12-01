@@ -18,6 +18,12 @@ public class Player extends Entity {
     PlayerController playerController;
 
 
+    // USED FOR CAMERA
+    private final int screenX;                      //this holds the screen width along the x-axis
+    private final int screenY;                      //this holds the screen height along the y-axis
+
+
+
     /**
      * This is the constructor for the Player class. It uses an instance of the GamePanel class to implement the update
      * and draw methods to handle all data and drawing of the player instead of doing all that within the GamePanel class itself.
@@ -29,6 +35,20 @@ public class Player extends Entity {
     public Player(GamePanel gamePanel, PlayerController playerController) {
         this.gamePanel = gamePanel;
         this.playerController = playerController;
+
+
+        //this is for setting the camera to focus around the middle of the screen
+        //small offset since the coordinates would otherwise point to the top left corner of the middle tile on the screen
+        screenX = (gamePanel.getScreenWidth() / 2)  - (gamePanel.getTileSize()/2);
+        screenY = (gamePanel.getScreenHeight() / 2) - (gamePanel.getTileSize()/2);
+
+
+        //collision
+        //these are only hard coded since I didn't feel like doing the math to get these answers
+        //one tile is 48x48, so making the collision box a bit smaller is recommended
+        collisionBox = new Rectangle(8,16,32,32);
+
+
 
         setDefaultValues();
         getPlayerImages();
@@ -48,6 +68,11 @@ public class Player extends Entity {
     public Player(GamePanel gamePanel, PlayerController playerController, int x, int y, int speed, String direction) {
         this.gamePanel = gamePanel;
         this.playerController = playerController;
+
+
+        screenX = (gamePanel.getScreenWidth() / 2)  - (gamePanel.getTileSize()/2);
+        screenY = (gamePanel.getScreenHeight() / 2) - (gamePanel.getTileSize()/2);
+
 
         setDefaultValues(x, y, speed, direction);
         getPlayerImages();
@@ -72,17 +97,45 @@ public class Player extends Entity {
             //NOTE** Using else if statements does not allow for diagonal movement
             if (playerController.isUpPressed()){
                 direction = "up";
-                this.y -= this.speed;
+
             } else if (playerController.isDownPressed()){
                 direction = "down";
-                this.y += this.speed;
+
             } else if (playerController.isLeftPressed()) {
                 direction = "left";
-                this.x -= this.speed;
+
             } else if (playerController.isRightPressed()) {
                 direction = "right";
-                this.x += this.speed;
+
             }
+
+            //check tile collision
+            collisionOn = false;
+            gamePanel.getCollisionHandler().checkTileCollision(this);
+
+
+            //if collision false, continue moving
+            if(collisionOn == false){
+
+                switch (direction){
+                    case "up":
+                        this.worldY -= this.speed;
+                        break;
+
+                    case "down":
+                        this.worldY += this.speed;
+                        break;
+
+                    case "left":
+                        this.worldX -= this.speed;
+                        break;
+
+                    case "right":
+                        this.worldX += this.speed;
+                        break;
+                }
+            }
+
 
 
             //This handles the animation sequence on the data side of things
@@ -144,7 +197,7 @@ public class Player extends Entity {
 
 
         //Finally, draw image to screen
-        graphics2D.drawImage(image, x, y, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+        graphics2D.drawImage(image, screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
     }
 
 
@@ -205,8 +258,8 @@ public class Player extends Entity {
      */
     @Override
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        worldX = gamePanel.getTileSize() * 23;
+        worldY = gamePanel.getTileSize() * 21;
         speed = 4;
         direction = "down";
     }
@@ -226,13 +279,13 @@ public class Player extends Entity {
     }
 
     @Override
-    public int getX() {
-        return super.getX();
+    public int getWorldX() {
+        return super.getWorldX();
     }
 
     @Override
-    public int getY() {
-        return super.getY();
+    public int getWorldY() {
+        return super.getWorldY();
     }
 
     @Override
@@ -241,12 +294,20 @@ public class Player extends Entity {
     }
 
     @Override
-    public void setX(int x) {
-        super.setX(x);
+    public void setWorldX(int x) {
+        super.setWorldX(x);
     }
 
     @Override
-    public void setY(int y) {
-        super.setY(y);
+    public void setWorldY(int y) {
+        super.setWorldY(y);
+    }
+
+    public int getScreenX() {
+        return screenX;
+    }
+
+    public int getScreenY() {
+        return screenY;
     }
 }

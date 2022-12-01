@@ -12,6 +12,8 @@ public class Tile {
     public boolean collision = false;
     private int tileNumber;
 
+    private String tileName;
+
     public BufferedImage getTileImage() {
         return tileImage;
     }
@@ -26,5 +28,21 @@ public class Tile {
 
     public int getTileNumber() {
         return tileNumber;
+    }
+
+    public boolean isCollision() {
+        return collision;
+    }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
+    }
+
+    public String getTileName() {
+        return tileName;
+    }
+
+    public void setTileName(String tileName) {
+        this.tileName = tileName;
     }
 }
