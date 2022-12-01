@@ -20,3 +20,5 @@ Currently implemented:
     11/14:
 
              - Added tiles and tile manager to draw the background tiles to the screen
+
+             - Implemented camera to allow for maps larger than screen size

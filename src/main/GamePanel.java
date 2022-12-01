@@ -23,17 +23,28 @@ public class GamePanel extends JPanel implements Runnable{
     private final int screenHeight = tileSize * maxScreenRows;      //overall screen height in pixels
 
 
+    // WORLD SETTINGS
+    private final int maxWorldColumns = 50;                         //max number of columns a world can have
+    private final int maxWorldRows = 50;                            //max number of rows a world can have
+    private final int worldWidth = tileSize * maxWorldColumns;      //max width of the world in terms of pixels
+    private final int worldHeight = tileSize * maxWorldRows;        //max height of the world in terms of pixels
+
 
     // PLAYER DATA
     PlayerController playerController = new PlayerController();
     Player player = new Player(this, playerController);
+    CollisionHandler collisionHandler = new CollisionHandler(this);
 
 
     //BACKGROUND TILES
     TileManager tileManager = new TileManager(this);
 
+
+
+
+
     int fps = 60;
-    Thread gameThread;                                      //handles the gameplay loop
+    Thread gameThread;                                              //handles the gameplay loop
 
     public GamePanel(){
 
@@ -161,5 +172,33 @@ public class GamePanel extends JPanel implements Runnable{
 
     public int getScreenHeight() {
         return screenHeight;
+    }
+
+    public int getMaxWorldColumns() {
+        return maxWorldColumns;
+    }
+
+    public int getMaxWorldRows() {
+        return maxWorldRows;
+    }
+
+    public int getWorldWidth() {
+        return worldWidth;
+    }
+
+    public int getWorldHeight() {
+        return worldHeight;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public CollisionHandler getCollisionHandler() {
+        return collisionHandler;
+    }
+
+    public TileManager getTileManager() {
+        return tileManager;
     }
 }

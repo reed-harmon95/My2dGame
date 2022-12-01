@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -7,47 +8,63 @@ import java.awt.image.BufferedImage;
  * get instantiated in the rest of the program. It should only be inherited by other classes.
  *
  */
-public abstract class Entity {
+public class Entity {
 
-    protected int x, y;                                     //starting coordinates of the entity
-    protected int speed;                                    //movement speed of entity;
+    protected int worldX, worldY;                                                        //starting coordinates of the entity in relation to the world map
+    protected int speed;                                                                 //movement speed of entity;
 
 
     //IMAGE AND ANIMATION DATA
     //NOTE** Change to array when I have time
     protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;        //creates buffered images to hold walking animation images
-    protected String direction;                             //holds the direction the entity is facing in order to load the correct image array
+    protected String direction;                                                          //holds the direction the entity is facing in order to load the correct image array
     protected int spriteCounter = 0;
     protected int spriteNumber = 1;
+
+
+    protected Rectangle collisionBox;
+    protected boolean collisionOn = false;
 
     public void setDefaultValues(){
 
     }
 
     public void setDefaultValues(int x, int y, int speed, String direction){
-        this.x = x;
-        this.y = y;
+        this.worldX = x;
+        this.worldY = y;
         this.speed = speed;
         this.direction = direction;
     }
 
-    public int getX() {
-        return x;
+    public int getWorldX() {
+        return worldX;
     }
 
-    public int getY() {
-        return y;
+    public int getWorldY() {
+        return worldY;
     }
 
     public int getSpeed() {
         return speed;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setWorldX(int x) {
+        this.worldX = x;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setWorldY(int y) {
+        this.worldY = y;
+    }
+
+    public Rectangle getCollisionBox() {
+        return collisionBox;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setCollisionOn(boolean collisionOn) {
+        this.collisionOn = collisionOn;
     }
 }
