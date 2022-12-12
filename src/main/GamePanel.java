@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -40,11 +41,16 @@ public class GamePanel extends JPanel implements Runnable{
     TileManager tileManager = new TileManager(this);
 
 
+    //GAME OBJECTS
+    public SuperObject objects[] = new SuperObject[10];
+    AssetManager assetManager = new AssetManager(this, objects);
 
 
 
     int fps = 60;
     Thread gameThread;                                              //handles the gameplay loop
+
+
 
     public GamePanel(){
 
@@ -57,6 +63,17 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
+    /**
+     * This method handles initial setup of data/assets prior to the game running.
+     */
+    public void initialSetup(){
+        objects = assetManager.setObject();
+    }
+
+
+    /**
+     * This method is used by the GamePanel class to start a thread to run the main gameplay loop.
+     */
     public void startGameThread(){
 
         gameThread = new Thread(this);
@@ -64,7 +81,11 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
-    //this is the run method for the gameThread Thread which hosts the main gameplay loop
+    /**
+     * This run method handles the main gameplay loop of the game.
+     * It utilizes the delta time/accumulator method to handle the frames per second.
+     * Each frame, the update and paint methods are called to update necessary game data and appropriately paint that data to the screen.
+     */
     @Override
     public void run() {
 
@@ -120,7 +141,11 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
-    //handles the data on the screen
+    /**
+     * This is the update method that gets called in every frame during the duration of the game instance.
+     * This method handles updating the data of various objects that interact within the game.
+     * This updated data then gets used by the paint method to properly draw the data to the screen during each frame.
+     */
     public void update() {
 
         //Update the players position based on the keyboard input
@@ -129,7 +154,14 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
-    //handles putting images to the screen
+    /**
+     * This is the paint method that is responsible for drawing all the data to the screen.
+     * It is run every frame after the update method to ensure that all data updated during this frame are appropriately drawn to the screen.
+     * This method utilizes the Swing toolkit Graphics class to accomplish drawing images to the screen.
+     *
+     *
+     * @param graphics      - Instance of the Graphics class used to draw data in the game to the screen
+     */
     public void paintComponent(Graphics graphics) {
 
         super.paintComponent(graphics);
@@ -144,6 +176,16 @@ public class GamePanel extends JPanel implements Runnable{
         tileManager.draw(graphics2D);
 
 
+        //drawing object to screen
+        //loop through the objects array
+        //if the object in the array is instantiated, draw it ot the screen
+        for(int i = 0; i < objects.length; i++){
+            if(objects[i] != null){
+                objects[i].draw(graphics2D, this);
+            }
+        }
+
+
         //drawing player character to screen
         player.draw(graphics2D);
 
@@ -153,7 +195,15 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
-    //GETTERS FOR FIELDS
+    /**
+     * These are the Getters/Setters for various fields in this class that get utilized in other classes throughout this program.
+     *
+     *      * Note -    I should probably clean this up a bit,
+     *                  but this is my first attempt at game development,
+     *                  it shall be a problem for future me.
+     *
+     *                      - Reed Harmon 2022
+     */
     public int getTileSize() {
         return tileSize;
     }
@@ -201,4 +251,6 @@ public class GamePanel extends JPanel implements Runnable{
     public TileManager getTileManager() {
         return tileManager;
     }
+
+
 }

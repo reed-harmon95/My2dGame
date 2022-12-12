@@ -22,8 +22,10 @@ public class Entity {
     protected int spriteNumber = 1;
 
 
+    // COLLISION
     protected Rectangle collisionBox;
     protected boolean collisionOn = false;
+    protected int CollisionBoxDefaultX, CollisionBoxDefaultY;                           // these are used to reset the default x/y values of the collision box for an entity when interacting with an object
 
     public void setDefaultValues(){
 
@@ -66,5 +68,21 @@ public class Entity {
 
     public void setCollisionOn(boolean collisionOn) {
         this.collisionOn = collisionOn;
+    }
+
+    public void setCollisionBoxX(int x) {
+        this.collisionBox.x = x;
+    }
+
+    public void setCollisionBoxY(int y) {
+        this.collisionBox.y = y;
+    }
+
+    public int getCollisionBoxDefaultX() {
+        return CollisionBoxDefaultX;
+    }
+
+    public int getCollisionBoxDefaultY() {
+        return CollisionBoxDefaultY;
     }
 }

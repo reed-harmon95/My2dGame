@@ -25,7 +25,8 @@ public class Main {
         window.setVisible(true);
 
 
-        //start the gameThread to run the gameplay loop
+        //load up the game and start running the thread
+        gamePanel.initialSetup();
         gamePanel.startGameThread();
     }
 }

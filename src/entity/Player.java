@@ -23,6 +23,10 @@ public class Player extends Entity {
     private final int screenY;                      //this holds the screen height along the y-axis
 
 
+    // OBJECT INTERACTION
+    int numberOfKeys = 0;
+
+
 
     /**
      * This is the constructor for the Player class. It uses an instance of the GamePanel class to implement the update
@@ -47,7 +51,9 @@ public class Player extends Entity {
         //these are only hard coded since I didn't feel like doing the math to get these answers
         //one tile is 48x48, so making the collision box a bit smaller is recommended
         collisionBox = new Rectangle(8,16,32,32);
-
+        
+        super.CollisionBoxDefaultX = collisionBox.x;
+        super.CollisionBoxDefaultY = collisionBox.y;
 
 
         setDefaultValues();
@@ -112,6 +118,11 @@ public class Player extends Entity {
             //check tile collision
             collisionOn = false;
             gamePanel.getCollisionHandler().checkTileCollision(this);
+
+
+            // check object collision
+            int objectIndex = gamePanel.getCollisionHandler().checkObjectCollision(this, true);
+            pickUpObject(objectIndex);
 
 
             //if collision false, continue moving
@@ -198,6 +209,58 @@ public class Player extends Entity {
 
         //Finally, draw image to screen
         graphics2D.drawImage(image, screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+    }
+
+
+    /**
+     * This method handles the object interaction with the player in the instance that a player collides with an object that can be picked up.
+     *
+     * @param index     - index of the object being picked up in the objects array
+     */
+    public void pickUpObject(int index){
+
+        // 999 refers to the case that the player has not interacted with an object
+        if(index != 999){
+
+            // figure out which object the player is interacting with
+            String objectName = gamePanel.objects[index].getName();
+
+
+            //decide how to interact with the object
+            switch (objectName){
+                case "Key":
+                    numberOfKeys++;
+
+
+                    // remove the object from the array
+                    gamePanel.objects[index] = null;
+                    break;
+                case "Door":
+
+                    //if the player has a key
+                    if(numberOfKeys > 0){
+                        numberOfKeys--;
+
+
+                        // remove the object from the array
+                        gamePanel.objects[index] = null;
+                    }
+
+                    break;
+                case "Chest":
+
+                    //if the player has a key
+                    if(numberOfKeys > 0){
+                        numberOfKeys--;
+
+
+                        // remove the object from the array
+                        gamePanel.objects[index] = null;
+                    }
+                    break;
+            }
+
+        }
     }
 
 
