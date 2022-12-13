@@ -1,9 +1,6 @@
 package main;
 
-import object.Object_Chest;
-import object.Object_Door;
-import object.Object_Key;
-import object.SuperObject;
+import object.*;
 
 public class AssetManager {
 
@@ -63,6 +60,12 @@ public class AssetManager {
         objectsArray[6] = new Object_Chest();
         objectsArray[6].setWorldX(10 * gamePanel.getTileSize());
         objectsArray[6].setWorldY(7 * gamePanel.getTileSize());
+
+
+        // BOOTS
+        objectsArray[7] = new Object_Boots();
+        objectsArray[7].setWorldX(24 * gamePanel.getTileSize());
+        objectsArray[7].setWorldY(22 * gamePanel.getTileSize());
 
         return objectsArray;
     }
