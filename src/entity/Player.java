@@ -257,6 +257,11 @@ public class Player extends Entity {
                         // remove the object from the array
                         gamePanel.objects[index] = null;
                     }
+                case "Boots":
+
+                    // Increase movement speed
+                    speed += 2;
+                    gamePanel.objects[index] = null;
                     break;
             }
 
