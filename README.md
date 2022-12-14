@@ -44,3 +44,8 @@ Currently implemented:
     12/13
 
             - Added boots object which doubles player's movement speed when picked up
+            
+            
+    12/14
+    
+            - Added background music and sound effects. Works in Linux. Mute functional;ity is broken
