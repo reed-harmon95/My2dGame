@@ -16,6 +16,7 @@ public class PlayerController implements KeyListener {
     private boolean downPressed;
     private boolean leftPressed;
     private boolean rightPressed;
+    private boolean isMuted = false;
 
 
 
@@ -50,6 +51,13 @@ public class PlayerController implements KeyListener {
         if(code == KeyEvent.VK_D){
             rightPressed = true;
         }
+        if(code == KeyEvent.VK_M && isMuted == false){
+            isMuted = true;
+            System.out.println("Muted: " + isMuted);
+        } else if (code == KeyEvent.VK_M && isMuted == true) {
+            isMuted = false;
+            System.out.println("Muted: " + isMuted);
+        }
     }
 
 
@@ -75,6 +83,7 @@ public class PlayerController implements KeyListener {
         if(code == KeyEvent.VK_D){
             rightPressed = false;
         }
+
     }
 
 
@@ -93,5 +102,13 @@ public class PlayerController implements KeyListener {
 
     public boolean isRightPressed() {
         return rightPressed;
+    }
+
+    public boolean isMuted() {
+        return isMuted;
+    }
+
+    public void setMuted(boolean muted) {
+        isMuted = muted;
     }
 }
