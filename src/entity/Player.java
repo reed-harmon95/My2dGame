@@ -152,6 +152,8 @@ public class Player extends Entity {
             //This handles the animation sequence on the data side of things
             spriteAnimationCounter();
         }
+
+
     }
 
 
@@ -231,6 +233,9 @@ public class Player extends Entity {
                 case "Key":
                     numberOfKeys++;
 
+                    // play sound effect
+                    gamePanel.playSoundEffect(1);
+
 
                     // remove the object from the array
                     gamePanel.objects[index] = null;
@@ -240,6 +245,9 @@ public class Player extends Entity {
                     //if the player has a key
                     if(numberOfKeys > 0){
                         numberOfKeys--;
+
+                        // play sound effect
+                        gamePanel.playSoundEffect(4);
 
 
                         // remove the object from the array
@@ -260,7 +268,12 @@ public class Player extends Entity {
                 case "Boots":
 
                     // Increase movement speed
-                    speed += 2;
+                    speed += 1.5;
+
+                    // play sound effect
+                    gamePanel.playSoundEffect(3);
+
+
                     gamePanel.objects[index] = null;
                     break;
             }

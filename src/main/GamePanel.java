@@ -37,13 +37,18 @@ public class GamePanel extends JPanel implements Runnable{
     CollisionHandler collisionHandler = new CollisionHandler(this);
 
 
-    //BACKGROUND TILES
+    // BACKGROUND TILES
     TileManager tileManager = new TileManager(this);
 
 
-    //GAME OBJECTS
+    // GAME OBJECTS
     public SuperObject objects[] = new SuperObject[10];
     AssetManager assetManager = new AssetManager(this, objects);
+
+
+    // SOUND
+    Sound sound = new Sound();
+    boolean isPlayingBackgroundMusic = false;
 
 
 
@@ -67,7 +72,15 @@ public class GamePanel extends JPanel implements Runnable{
      * This method handles initial setup of data/assets prior to the game running.
      */
     public void initialSetup(){
+
+
+        // Set objects to game map
         objects = assetManager.setObject();
+
+
+        // Play background music
+        playBackgroundMusic(0);
+        isPlayingBackgroundMusic = true;
     }
 
 
@@ -136,6 +149,12 @@ public class GamePanel extends JPanel implements Runnable{
             }
 
 
+
+            if(playerController.isMuted() == true && isPlayingBackgroundMusic == true){
+                sound.muteVolume();
+            } else if(playerController.isMuted() == false && isPlayingBackgroundMusic == false) {
+                sound.play();
+            }
         }
 
     }
@@ -192,6 +211,27 @@ public class GamePanel extends JPanel implements Runnable{
 
         //cleanup object once done drawing
         graphics2D.dispose();
+    }
+
+
+    public void playBackgroundMusic(int index) {
+
+
+        sound.setFile(index);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopBackgroundMusic(int index){
+        sound.setFile(index);
+        sound.stop();
+    }
+
+    public void playSoundEffect(int index){
+
+
+        sound.setFile(index);
+        sound.play();
     }
 
 
