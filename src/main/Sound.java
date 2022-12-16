@@ -87,6 +87,8 @@ public class Sound {
     }
 
     public void muteVolume() {
+
+        //going from false to true
         if(isMuted == false){
             previousVolume = currentVolume;
             currentVolume = -80.0f;

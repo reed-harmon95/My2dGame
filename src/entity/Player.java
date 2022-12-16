@@ -239,6 +239,10 @@ public class Player extends Entity {
 
                     // remove the object from the array
                     gamePanel.objects[index] = null;
+
+                    //notification on ui
+                    gamePanel.getUserInterface().displayItemMessage(objectName);
+
                     break;
                 case "Door":
 
@@ -252,19 +256,20 @@ public class Player extends Entity {
 
                         // remove the object from the array
                         gamePanel.objects[index] = null;
+
+                        //notification on ui
+                        gamePanel.getUserInterface().displayItemMessage(objectName);
+                    } else if(numberOfKeys <= 0){
+                        gamePanel.getUserInterface().displayLockedMessage(objectName);
                     }
 
                     break;
                 case "Chest":
 
-                    //if the player has a key
-                    if(numberOfKeys > 0){
-                        numberOfKeys--;
-
-
-                        // remove the object from the array
-                        gamePanel.objects[index] = null;
-                    }
+                    gamePanel.getUserInterface().setGameFinished(true);
+                    gamePanel.stopBackgroundMusic(0);
+                    gamePanel.playSoundEffect(2);
+                    break;
                 case "Boots":
 
                     // Increase movement speed
@@ -275,6 +280,9 @@ public class Player extends Entity {
 
 
                     gamePanel.objects[index] = null;
+
+                    //notification on ui
+                    gamePanel.getUserInterface().displayItemMessage(objectName);
                     break;
             }
 
@@ -390,5 +398,9 @@ public class Player extends Entity {
 
     public int getScreenY() {
         return screenY;
+    }
+
+    public int getNumberOfKeys() {
+        return numberOfKeys;
     }
 }
