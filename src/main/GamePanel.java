@@ -47,8 +47,13 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     // SOUND
-    Sound sound = new Sound();
+    Sound soundEffect = new Sound();
+    Sound music = new Sound();
     boolean isPlayingBackgroundMusic = false;
+
+
+    // USER INTERFACE
+    UserInterface userInterface = new UserInterface(this);
 
 
 
@@ -151,9 +156,9 @@ public class GamePanel extends JPanel implements Runnable{
 
 
             if(playerController.isMuted() == true && isPlayingBackgroundMusic == true){
-                sound.muteVolume();
+                music.muteVolume();
             } else if(playerController.isMuted() == false && isPlayingBackgroundMusic == false) {
-                sound.play();
+                playBackgroundMusic(0);
             }
         }
 
@@ -209,6 +214,9 @@ public class GamePanel extends JPanel implements Runnable{
         player.draw(graphics2D);
 
 
+        // DRAW UI
+        userInterface.draw(graphics2D);
+
         //cleanup object once done drawing
         graphics2D.dispose();
     }
@@ -217,21 +225,21 @@ public class GamePanel extends JPanel implements Runnable{
     public void playBackgroundMusic(int index) {
 
 
-        sound.setFile(index);
-        sound.play();
-        sound.loop();
+        music.setFile(index);
+        music.play();
+        music.loop();
     }
 
     public void stopBackgroundMusic(int index){
-        sound.setFile(index);
-        sound.stop();
+        music.setFile(index);
+        music.stop();
     }
 
     public void playSoundEffect(int index){
 
 
-        sound.setFile(index);
-        sound.play();
+        soundEffect.setFile(index);
+        soundEffect.play();
     }
 
 
@@ -292,5 +300,7 @@ public class GamePanel extends JPanel implements Runnable{
         return tileManager;
     }
 
-
+    public UserInterface getUserInterface() {
+        return userInterface;
+    }
 }
