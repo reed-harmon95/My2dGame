@@ -1,6 +1,9 @@
 # My2dGame
 
-This is just a simple 2d game written in java
+This is just a simple 2d game demo written in java.
+
+Credit to this tutorial: https://www.youtube.com/playlist?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq
+
 
 Currently implemented:
 
@@ -49,3 +52,9 @@ Currently implemented:
     
             - Added UI component to track relevant game data    
             - Added game completed fucntionality
+            
+            
+    12/17
+    
+            - Small tweak to the rendering algorithm to slightly improve performance
+            
