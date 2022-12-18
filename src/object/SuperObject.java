@@ -1,6 +1,7 @@
 package object;
 
 import main.GamePanel;
+import main.Utility;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,6 +12,8 @@ public class SuperObject {
     protected BufferedImage image;
     protected String name;
     protected int worldX, worldY;
+    protected Utility utilityTool = new Utility();
+
 
 
     // OBJECT DATA FOR COLLISION/INTERACTING WITH PLAYER
@@ -38,7 +41,7 @@ public class SuperObject {
                 worldY  + gamePanel.getTileSize() > gamePanel.getPlayer().getWorldY() - gamePanel.getPlayer().getScreenY() &&
                 worldY  - gamePanel.getTileSize() < gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().getScreenY()) {
 
-            graphics2D.drawImage(image, currScreenX, currScreenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+            graphics2D.drawImage(image, currScreenX, currScreenY, null);
         }
     }
 

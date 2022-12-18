@@ -1,10 +1,12 @@
 package tile;
 
 import main.GamePanel;
+import main.Utility;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -17,6 +19,7 @@ public class TileManager {
     GamePanel gamePanel;
     Tile[] tileSetList;         //list of different tile options available
     int mapTileNumbers[][];     //map of the tile numbers in integer form
+
 
 
 
@@ -39,50 +42,59 @@ public class TileManager {
 
     public void getTileImage() {
 
-        try{
+
+        // this will return a list of all files within the selected directory
+        // it is advised to check the file extensions as this gets a list of all files
+        File[] fileNames = new File("res/images/tiles").listFiles();
 
 
-            //instantiate tile array
-            //set the images for specific tiles e.g. tree, grass, water, wall
-            tileSetList[0] = new Tile();
-            tileSetList[0].setTileNumber(0);
-            tileSetList[0].setTileImage(ImageIO.read(getClass().getResourceAsStream("/images/tiles/grass.png")));
+        // loop through the files in the directory containing the images
+        // instantiate tile objects related to those file names
+        // a switch case is used because each tile index is mapped to a unique int value in the pre-made map
+        // giving a wrong index to a tile type would destroy the pre-made map
+        for(int i = 0; i < fileNames.length; i++){
 
-            tileSetList[1] = new Tile();
-            tileSetList[1].setTileNumber(1);
-            tileSetList[1].setTileImage(ImageIO.read(getClass().getResourceAsStream("/images/tiles/wall.png")));
-            tileSetList[1].setTileName("wall");
-            tileSetList[1].setCollision(true);
-
-            tileSetList[2] = new Tile();
-            tileSetList[2].setTileNumber(2);
-            tileSetList[2].setTileImage(ImageIO.read(getClass().getResourceAsStream("/images/tiles/water.png")));
-            tileSetList[2].setTileName("water");
-            tileSetList[2].setCollision(true);
-
-            tileSetList[3] = new Tile();
-            tileSetList[3].setTileNumber(3);
-            tileSetList[3].setTileImage(ImageIO.read(getClass().getResourceAsStream("/images/tiles/earth.png")));
-
-            tileSetList[4] = new Tile();
-            tileSetList[4].setTileNumber(4);
-            tileSetList[4].setTileImage(ImageIO.read(getClass().getResourceAsStream("/images/tiles/tree.png")));
-            tileSetList[4].setTileName("tree");
-            tileSetList[4].setCollision(true);
-
-            tileSetList[5] = new Tile();
-            tileSetList[5].setTileNumber(5);
-            tileSetList[5].setTileImage(ImageIO.read(getClass().getResourceAsStream("/images/tiles/sand.png")));
-
-
-
-
-
-        } catch (IOException e){
-            e.printStackTrace();
+            System.out.println(fileNames[i].getPath());
+            switch (fileNames[i].getName()){
+                case "grass.png":
+                    tileSetup(0, fileNames[i].getPath(), false);
+                    break;
+                case "wall.png":
+                    tileSetup(1, fileNames[i].getPath(), true);
+                    break;
+                case "water.png":
+                    tileSetup(2, fileNames[i].getPath(), true);
+                    break;
+                case "earth.png":
+                    tileSetup(3, fileNames[i].getPath(),false);
+                    break;
+                case "tree.png":
+                    tileSetup(4, fileNames[i].getPath(), true);
+                    break;
+                case "sand.png":
+                    tileSetup(5, fileNames[i].getPath(), false);
+                    break;
+                default:
+                    System.out.println("Error has occurred. File: " + fileNames[i].getName() + " does not have handler case. ");
+            }
         }
+
     }
 
+
+    public void tileSetup(int index, String imagePath, boolean collision){
+        Utility utilityTool = new Utility();
+
+        try {
+            tileSetList[index] = new Tile();
+            tileSetList[index].setTileNumber(index);
+            tileSetList[index].setTileImage(ImageIO.read(new File(imagePath)));
+            tileSetList[index].setTileImage(utilityTool.scaleImage(tileSetList[index].getTileImage(), gamePanel.getTileSize(), gamePanel.getTileSize()));
+            tileSetList[index].setCollision(collision);
+        } catch (IOException e) {
+            System.out.println("Error in tileSetup: tile at index " + index);
+        }
+    }
 
     public void loadIntegerMap(String filePath)  {
 
@@ -195,7 +207,7 @@ public class TileManager {
                 currWorldY  + gamePanel.getTileSize() > gamePanel.getPlayer().getWorldY() - gamePanel.getPlayer().getScreenY() &&
                 currWorldY  - gamePanel.getTileSize() < gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().getScreenY()) {
 
-                graphics2D.drawImage(tileSetList[tileNumber].getTileImage(), currScreenX, currScreenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+                graphics2D.drawImage(tileSetList[tileNumber].getTileImage(), currScreenX, currScreenY, null);
             }
 
 

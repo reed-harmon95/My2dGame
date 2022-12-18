@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.PlayerController;
+import main.Utility;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,8 +15,8 @@ import java.io.IOException;
  */
 public class Player extends Entity {
 
-    GamePanel gamePanel;
-    PlayerController playerController;
+    private GamePanel gamePanel;
+    private PlayerController playerController;
 
 
     // USED FOR CAMERA
@@ -24,7 +25,7 @@ public class Player extends Entity {
 
 
     // OBJECT INTERACTION
-    int numberOfKeys = 0;
+    private int numberOfKeys = 0;
 
 
 
@@ -210,7 +211,7 @@ public class Player extends Entity {
 
 
         //Finally, draw image to screen
-        graphics2D.drawImage(image, screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+        graphics2D.drawImage(image, screenX, screenY, null);
     }
 
 
@@ -298,24 +299,43 @@ public class Player extends Entity {
      */
     public void getPlayerImages(){
 
+        Utility utilityTool = new Utility();
 
-        //put the images into their respective image arrays
+        // put the images into their respective image arrays
+        // scale the images here instead of within each frame
         try {
 
             up1 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_up_1.png"));
+            up1 = utilityTool.scaleImage(up1, gamePanel.getTileSize(), gamePanel.getTileSize());
+
             up2 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_up_2.png"));
+            up2 = utilityTool.scaleImage(up2, gamePanel.getTileSize(), gamePanel.getTileSize());
+
             down1 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_down_1.png"));
+            down1 = utilityTool.scaleImage(down1, gamePanel.getTileSize(), gamePanel.getTileSize());
+
             down2 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_down_2.png"));
+            down2 = utilityTool.scaleImage(down2, gamePanel.getTileSize(), gamePanel.getTileSize());
+
             left1 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_left_1.png"));
+            left1 = utilityTool.scaleImage(left1, gamePanel.getTileSize(), gamePanel.getTileSize());
+
             left2 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_left_2.png"));
+            left2 = utilityTool.scaleImage(left2, gamePanel.getTileSize(), gamePanel.getTileSize());
+
             right1 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_right_1.png"));
+            right1 = utilityTool.scaleImage(right1, gamePanel.getTileSize(), gamePanel.getTileSize());
+
             right2 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_right_2.png"));
+            right2 = utilityTool.scaleImage(right2, gamePanel.getTileSize(), gamePanel.getTileSize());
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+
 
 
     /**
