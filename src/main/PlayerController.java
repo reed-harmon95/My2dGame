@@ -23,6 +23,13 @@ public class PlayerController implements KeyListener {
     private boolean checkDrawTime = false;
 
 
+    // GAME STATE
+    GamePanel gamePanel;                                        // needed to access the game state
+
+    public PlayerController (GamePanel gamePanel){
+        this.gamePanel = gamePanel;
+    }
+
 
     //not used currently, just necessary for implementing the KeyListener class
     //this would just handle events in the case a unicode char representing a key is sent from the keyboard
@@ -41,8 +48,7 @@ public class PlayerController implements KeyListener {
         int code = keyEvent.getKeyCode();
 
 
-        //check which key was pressed (W,A,S,D)
-        //flag the appropriate bool corresponding to the key press
+        // MOVEMENT
         if(code == KeyEvent.VK_W){
             upPressed = true;
         }
@@ -63,6 +69,19 @@ public class PlayerController implements KeyListener {
             System.out.println("Muted: " + isMuted);
         }
 
+
+        // GAME STATE
+        if(code == KeyEvent.VK_P){
+
+            // if playing, set to pause and vice versa
+            if(gamePanel.getGameState() == gamePanel.playState){
+                gamePanel.setGameState(gamePanel.pauseState);
+            } else if(gamePanel.getGameState() == gamePanel.pauseState){
+                gamePanel.setGameState(gamePanel.playState);
+            }
+        }
+
+
         // OPTIONAL: CHECK DRAW TIME
         if(code == KeyEvent.VK_T){
             if(checkDrawTime == true){
@@ -71,7 +90,6 @@ public class PlayerController implements KeyListener {
                 checkDrawTime = true;
             }
         }
-
     }
 
 

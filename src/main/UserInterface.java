@@ -11,7 +11,7 @@ public class UserInterface {
 
     // KEYS DISPLAY
     GamePanel gamePanel;
-    Font screenFont, gameWonFont;
+    Font screenFont, gameWonFont, gamePauseFont;
     BufferedImage keyImage;
 
 
@@ -33,6 +33,9 @@ public class UserInterface {
         this.gamePanel = gamePanel;
         screenFont = new Font("Arial", Font.PLAIN, 32);
         gameWonFont = new Font("Arial", Font.BOLD, 48);
+        gamePauseFont = new Font("Arial", Font.BOLD, 48);
+
+
         Object_Key key = new Object_Key(gamePanel);
         keyImage = key.getImage();
     }
@@ -61,42 +64,11 @@ public class UserInterface {
 
     public void draw(Graphics2D graphics2D){
 
-        if(gameFinished == true){
+        //set the fonts
+        graphics2D.setColor(Color.white);
+        graphics2D.setFont(screenFont);
 
-            graphics2D.setFont(gameWonFont);
-            graphics2D.setColor(Color.white);
-
-            // centering the font on the screen
-            // centering above player head
-            String gameFinishedText = "You won!";
-            int textLength = (int) graphics2D.getFontMetrics().getStringBounds(gameFinishedText, graphics2D).getWidth();
-            int x = (gamePanel.getScreenWidth()/2) - textLength/2;
-            int y = gamePanel.getScreenHeight()/2 - (gamePanel.getTileSize()*2);
-
-            graphics2D.drawString(gameFinishedText, x, y);
-
-
-            gameFinishedText = "Congratulations!";
-            textLength = (int) graphics2D.getFontMetrics().getStringBounds(gameFinishedText, graphics2D).getWidth();
-            x = (gamePanel.getScreenWidth()/2) - textLength/2;
-            y = gamePanel.getScreenHeight()/2 + (gamePanel.getTileSize()*2);
-            graphics2D.drawString(gameFinishedText, x, y);
-
-            gameFinishedText = "Play Time: " + playTimeFormat.format(playTime);
-            textLength = (int) graphics2D.getFontMetrics().getStringBounds(gameFinishedText, graphics2D).getWidth();
-            x = (gamePanel.getScreenWidth()/2) - textLength/2;
-            y = gamePanel.getScreenHeight()/2 + (gamePanel.getTileSize()*4);
-            graphics2D.drawString(gameFinishedText, x, y);
-
-            gamePanel.gameThread = null;
-
-
-        }else {
-            graphics2D.setFont(screenFont);
-            graphics2D.setColor(Color.white);
-            graphics2D.drawImage(keyImage, gamePanel.getTileSize()/2, gamePanel.getTileSize()/2, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
-            graphics2D.drawString("x " + gamePanel.getPlayer().getNumberOfKeys(), 74, 65);
-
+        if(gamePanel.getGameState() == gamePanel.playState){
 
             // TIMER
             playTime += (double) 1/60;
@@ -117,9 +89,33 @@ public class UserInterface {
                 }
 
             }
-        }
+        } else if (gamePanel.getGameState() == gamePanel.pauseState) {
 
+            drawPauseState(graphics2D);
+
+
+        }
     }
+
+    public void drawPauseState(Graphics2D graphics2D){
+
+        graphics2D.setFont(gamePauseFont);
+        String pausedText = "PAUSED";
+        int x;
+        int y = gamePanel.getScreenHeight()/2;
+        x = getXValueForCenteredText(pausedText, graphics2D);
+
+
+        graphics2D.drawString(pausedText, x, y);
+    }
+
+
+    public int getXValueForCenteredText(String Text, Graphics2D graphics2D){
+        int length = (int) graphics2D.getFontMetrics().getStringBounds(Text, graphics2D).getWidth();
+        int x = (gamePanel.getScreenWidth()/2) - (length/2);
+        return x;
+    }
+
 
     public void setGameFinished(boolean gameFinished) {
         this.gameFinished = gameFinished;
