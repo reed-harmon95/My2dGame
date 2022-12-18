@@ -32,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     // PLAYER DATA
-    PlayerController playerController = new PlayerController();
+    PlayerController playerController = new PlayerController(this);
     Player player = new Player(this, playerController);
     CollisionHandler collisionHandler = new CollisionHandler(this);
 
@@ -56,9 +56,15 @@ public class GamePanel extends JPanel implements Runnable{
     UserInterface userInterface = new UserInterface(this);
 
 
+    // GAME STATE
+    private int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
+
+
 
     int fps = 60;
-    Thread gameThread;                                              //handles the gameplay loop
+    private Thread gameThread;                              //handles the gameplay loop
 
 
 
@@ -86,6 +92,7 @@ public class GamePanel extends JPanel implements Runnable{
         // Play background music
         playBackgroundMusic(0);
         isPlayingBackgroundMusic = true;
+        gameState = playState;
     }
 
 
@@ -172,8 +179,16 @@ public class GamePanel extends JPanel implements Runnable{
      */
     public void update() {
 
-        //Update the players position based on the keyboard input
-        player.update();
+        // checking the state of the game
+        if(gameState == playState){
+
+            //Update the players position based on the keyboard input
+            player.update();
+
+        } else if (gameState == pauseState) {
+            // do nothing
+        }
+
 
     }
 
@@ -324,5 +339,17 @@ public class GamePanel extends JPanel implements Runnable{
 
     public UserInterface getUserInterface() {
         return userInterface;
+    }
+
+    public void setGameThread(Thread gameThread) {
+        this.gameThread = gameThread;
+    }
+
+    public int getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(int gameState) {
+        this.gameState = gameState;
     }
 }

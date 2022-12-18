@@ -31,11 +31,11 @@ public class TileManager {
 
         //Instantiate the list of different possible tiles to be used
         //Instantiate the integer form of the game map being used
-        tileSetList = new Tile[10];
+        tileSetList = new Tile[50];
         mapTileNumbers = new int[gamePanel.getMaxWorldColumns()][gamePanel.getMaxWorldRows()];
 
         getTileImage();
-        loadIntegerMap("/home/reed/Desktop/Projects/Java/My2dGame/res/images/maps/world01.txt");
+        loadIntegerMap("/home/reed/Desktop/Projects/Java/My2dGame/res/images/maps/world01V2.txt");
 
     }
 
@@ -48,6 +48,14 @@ public class TileManager {
         File[] fileNames = new File("res/images/tiles").listFiles();
 
 
+        // FILLER TO AVOID NULLPTR EXCEPTION
+        // MAP IS NOW USING 2 DIGIT NUMBERS INSTEAD OF 1 DIGIT
+        for(int i = 0; i < 10; i++)
+        {
+            tileSetup(i, "res/images/tiles/grass00.png", false);
+        }
+
+
         // loop through the files in the directory containing the images
         // instantiate tile objects related to those file names
         // a switch case is used because each tile index is mapped to a unique int value in the pre-made map
@@ -56,24 +64,117 @@ public class TileManager {
 
             System.out.println(fileNames[i].getPath());
             switch (fileNames[i].getName()){
-                case "grass.png":
-                    tileSetup(0, fileNames[i].getPath(), false);
+
+
+                // GRASS TILES
+                case "grass00.png":
+                    tileSetup(10, fileNames[i], false);
                     break;
+                case "grass01.png":
+                    tileSetup(11, fileNames[i], false);
+                    break;
+
+
+                // WATER TILES
+                case "water00.png":
+                    tileSetup(12, fileNames[i], true);
+                    break;
+                case "water01.png":
+                    tileSetup(13, fileNames[i], true);
+                    break;
+                case "water02.png":
+                    tileSetup(14, fileNames[i], true);
+                    break;
+                case "water03.png":
+                    tileSetup(15, fileNames[i], true);
+                    break;
+                case "water04.png":
+                    tileSetup(16, fileNames[i], true);
+                    break;
+                case "water05.png":
+                    tileSetup(17, fileNames[i], true);
+                    break;
+                case "water06.png":
+                    tileSetup(18, fileNames[i], true);
+                    break;
+                case "water07.png":
+                    tileSetup(19, fileNames[i], true);
+                    break;
+                case "water08.png":
+                    tileSetup(20, fileNames[i], true);
+                    break;
+                case "water09.png":
+                    tileSetup(21, fileNames[i], true);
+                    break;
+                case "water10.png":
+                    tileSetup(22, fileNames[i], true);
+                    break;
+                case "water11.png":
+                    tileSetup(23, fileNames[i], true);
+                    break;
+                case "water12.png":
+                    tileSetup(24, fileNames[i], true);
+                    break;
+                case "water13.png":
+                    tileSetup(25, fileNames[i], true);
+                    break;
+
+
+                // ROAD TILES
+                case "road00.png":
+                    tileSetup(26, fileNames[i], false);
+                    break;
+                case "road01.png":
+                    tileSetup(27, fileNames[i], false);
+                    break;
+                case "road02.png":
+                    tileSetup(28, fileNames[i], false);
+                    break;
+                case "road03.png":
+                    tileSetup(29, fileNames[i], false);
+                    break;
+                case "road04.png":
+                    tileSetup(30, fileNames[i], false);
+                    break;
+                case "road05.png":
+                    tileSetup(31, fileNames[i], false);
+                    break;
+                case "road06.png":
+                    tileSetup(32, fileNames[i], false);
+                    break;
+                case "road07.png":
+                    tileSetup(33, fileNames[i], false);
+                    break;
+                case "road08.png":
+                    tileSetup(34, fileNames[i], false);
+                    break;
+                case "road09.png":
+                    tileSetup(35, fileNames[i], false);
+                    break;
+                case "road10.png":
+                    tileSetup(36, fileNames[i], false);
+                    break;
+                case "road11.png":
+                    tileSetup(37, fileNames[i], false);
+                    break;
+                case "road12.png":
+                    tileSetup(38, fileNames[i], false);
+                    break;
+
+
+
+
                 case "wall.png":
-                    tileSetup(1, fileNames[i].getPath(), true);
+                    tileSetup(40, fileNames[i], true);
                     break;
-                case "water.png":
-                    tileSetup(2, fileNames[i].getPath(), true);
-                    break;
+
                 case "earth.png":
-                    tileSetup(3, fileNames[i].getPath(),false);
+                    tileSetup(39, fileNames[i],false);
                     break;
                 case "tree.png":
-                    tileSetup(4, fileNames[i].getPath(), true);
+                    tileSetup(41, fileNames[i], true);
                     break;
-                case "sand.png":
-                    tileSetup(5, fileNames[i].getPath(), false);
-                    break;
+
                 default:
                     System.out.println("Error has occurred. File: " + fileNames[i].getName() + " does not have handler case. ");
             }
@@ -81,6 +182,21 @@ public class TileManager {
 
     }
 
+
+    public void tileSetup(int index, File fileName, boolean collision){
+        Utility utilityTool = new Utility();
+
+        try {
+            tileSetList[index] = new Tile();
+            tileSetList[index].setTileNumber(index);
+            tileSetList[index].setTileImage(ImageIO.read(new File(fileName.getPath())));
+            tileSetList[index].setTileImage(utilityTool.scaleImage(tileSetList[index].getTileImage(), gamePanel.getTileSize(), gamePanel.getTileSize()));
+            tileSetList[index].setTileName(fileName.getName());
+            tileSetList[index].setCollision(collision);
+        } catch (IOException e) {
+            System.out.println("Error in tileSetup: tile at index " + index);
+        }
+    }
 
     public void tileSetup(int index, String imagePath, boolean collision){
         Utility utilityTool = new Utility();
@@ -90,6 +206,7 @@ public class TileManager {
             tileSetList[index].setTileNumber(index);
             tileSetList[index].setTileImage(ImageIO.read(new File(imagePath)));
             tileSetList[index].setTileImage(utilityTool.scaleImage(tileSetList[index].getTileImage(), gamePanel.getTileSize(), gamePanel.getTileSize()));
+            tileSetList[index].setTileName("error");
             tileSetList[index].setCollision(collision);
         } catch (IOException e) {
             System.out.println("Error in tileSetup: tile at index " + index);
