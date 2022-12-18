@@ -191,11 +191,21 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(graphics);
 
 
-        //set up instance of graphics 2d which includes some more functionality than regular graphics
+        // OPTIONAL: CHECK DRAW TIME
+        long drawTimeStart = 0;
+        if(playerController.isCheckDrawTime()){
+
+            drawTimeStart = System.nanoTime();
+        }
+
+
+
+
+        // SET UP GRAPICS2D
         Graphics2D graphics2D = (Graphics2D) graphics;
 
 
-        //drawing background tiles(map) to screen
+        // DRAW TILES
         //NOTE** This should be done before drawing the player character so the player character is on top of the tiles
         tileManager.draw(graphics2D);
 
@@ -210,12 +220,24 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
 
-        //drawing player character to screen
+        // DRAW PLAYER
         player.draw(graphics2D);
 
 
         // DRAW UI
         userInterface.draw(graphics2D);
+
+
+        // OPTIONAL: CHECK DRAW TIME
+        if(playerController.isCheckDrawTime()){
+            long drawTimeEnd = System.nanoTime();
+            long timePerFrame = drawTimeEnd - drawTimeStart;
+            graphics2D.setColor(Color.white);
+            graphics2D.drawString("Draw Time: " + timePerFrame, 10, 400);
+            //System.out.println("Draw Time: " + timePerFrame);
+        }
+
+
 
         //cleanup object once done drawing
         graphics2D.dispose();

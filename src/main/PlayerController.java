@@ -19,6 +19,10 @@ public class PlayerController implements KeyListener {
     private boolean isMuted = false;
 
 
+    // Debug
+    private boolean checkDrawTime = false;
+
+
 
     //not used currently, just necessary for implementing the KeyListener class
     //this would just handle events in the case a unicode char representing a key is sent from the keyboard
@@ -58,6 +62,16 @@ public class PlayerController implements KeyListener {
             isMuted = false;
             System.out.println("Muted: " + isMuted);
         }
+
+        // OPTIONAL: CHECK DRAW TIME
+        if(code == KeyEvent.VK_T){
+            if(checkDrawTime == true){
+                checkDrawTime = false;
+            } else if(checkDrawTime == false){
+                checkDrawTime = true;
+            }
+        }
+
     }
 
 
@@ -110,5 +124,9 @@ public class PlayerController implements KeyListener {
 
     public void setMuted(boolean muted) {
         isMuted = muted;
+    }
+
+    public boolean isCheckDrawTime() {
+        return checkDrawTime;
     }
 }

@@ -33,7 +33,7 @@ public class UserInterface {
         this.gamePanel = gamePanel;
         screenFont = new Font("Arial", Font.PLAIN, 32);
         gameWonFont = new Font("Arial", Font.BOLD, 48);
-        Object_Key key = new Object_Key();
+        Object_Key key = new Object_Key(gamePanel);
         keyImage = key.getImage();
     }
 
