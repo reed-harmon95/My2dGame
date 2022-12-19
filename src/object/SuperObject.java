@@ -6,7 +6,7 @@ import main.Utility;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class SuperObject {
+public abstract class SuperObject {
 
     // OBJECT DATA FOR DRAWING TO SCREEN
     protected BufferedImage image;
