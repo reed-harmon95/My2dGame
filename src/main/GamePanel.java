@@ -1,5 +1,6 @@
 package main;
 
+import entity.Entity;
 import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
@@ -41,9 +42,10 @@ public class GamePanel extends JPanel implements Runnable{
     TileManager tileManager = new TileManager(this);
 
 
-    // GAME OBJECTS
+    // GAME OBJECTS / ENTITY
     public SuperObject objects[] = new SuperObject[10];
-    AssetManager assetManager = new AssetManager(this, objects);
+    public Entity npcArray[]  = new Entity[10];
+    AssetManager assetManager = new AssetManager(this, objects, npcArray);
 
 
     // SOUND
@@ -87,6 +89,9 @@ public class GamePanel extends JPanel implements Runnable{
 
         // Set objects to game map
         objects = assetManager.setObject();
+
+        // Set up NPCs to game map
+        npcArray = assetManager.setNPC();
 
 
         // Play background music
@@ -185,6 +190,14 @@ public class GamePanel extends JPanel implements Runnable{
             //Update the players position based on the keyboard input
             player.update();
 
+            for(int i = 0; i < npcArray.length; i++){
+
+                if(npcArray[i] != null){
+                    npcArray[i].update();
+                }
+
+            }
+
         } else if (gameState == pauseState) {
             // do nothing
         }
@@ -233,6 +246,14 @@ public class GamePanel extends JPanel implements Runnable{
                 objects[i].draw(graphics2D, this);
             }
         }
+
+        for(int i = 0; i < npcArray.length; i++){
+            if(npcArray[i] != null){
+                npcArray[i].draw(graphics2D);
+            }
+        }
+
+
 
 
         // DRAW PLAYER

@@ -4,10 +4,9 @@ import main.GamePanel;
 import main.PlayerController;
 import main.Utility;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.File;
 
 /**
  * This class represents the player that the user controls. It uses the playerController to move and this class houses
@@ -15,7 +14,7 @@ import java.io.IOException;
  */
 public class Player extends Entity {
 
-    private GamePanel gamePanel;
+
     private PlayerController playerController;
 
 
@@ -38,8 +37,9 @@ public class Player extends Entity {
      * @param playerController      - Used to handle the player input from the keyboard
      */
     public Player(GamePanel gamePanel, PlayerController playerController) {
-        this.gamePanel = gamePanel;
+        super(gamePanel);
         this.playerController = playerController;
+        player = true;
 
 
         //this is for setting the camera to focus around the middle of the screen
@@ -56,32 +56,7 @@ public class Player extends Entity {
         super.CollisionBoxDefaultX = collisionBox.x;
         super.CollisionBoxDefaultY = collisionBox.y;
 
-
         setDefaultValues();
-        getPlayerImages();
-    }
-
-
-    /**
-     * This is another constructor for the Player class. This just has extra fields being passed in as opposed to the default constructor.
-     *
-     * @param gamePanel             - Used to update player data and image drawing
-     * @param playerController      - Used to handle player movement from keyboard input
-     * @param x                     - Starting value on x-axis in terms of pixels
-     * @param y                     - Starting value on y-axis in terms of pixels
-     * @param speed                 - Movement speed per frame in terms of pixels
-     * @param direction             - Starting direction
-     */
-    public Player(GamePanel gamePanel, PlayerController playerController, int x, int y, int speed, String direction) {
-        this.gamePanel = gamePanel;
-        this.playerController = playerController;
-
-
-        screenX = (gamePanel.getScreenWidth() / 2)  - (gamePanel.getTileSize()/2);
-        screenY = (gamePanel.getScreenHeight() / 2) - (gamePanel.getTileSize()/2);
-
-
-        setDefaultValues(x, y, speed, direction);
         getPlayerImages();
     }
 
@@ -124,6 +99,11 @@ public class Player extends Entity {
             // check object collision
             int objectIndex = gamePanel.getCollisionHandler().checkObjectCollision(this, true);
             pickUpObject(objectIndex);
+
+
+            // check npc collision
+            int npcIndex = gamePanel.getCollisionHandler().checkEntityCollision(this, gamePanel.npcArray);
+            interactNPC(npcIndex);
 
 
             //if collision false, continue moving
@@ -291,6 +271,15 @@ public class Player extends Entity {
     }
 
 
+    public void interactNPC(int index){
+
+
+        if(index != 999){
+            //System.out.println("You are hitting npc");
+        }
+    }
+
+
 
     /**
      * This method loads the individual images into their respective images. Since the number of images is small
@@ -299,39 +288,51 @@ public class Player extends Entity {
      */
     public void getPlayerImages(){
 
-        Utility utilityTool = new Utility();
-
-        // put the images into their respective image arrays
-        // scale the images here instead of within each frame
-        try {
-
-            up1 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_up_1.png"));
-            up1 = utilityTool.scaleImage(up1, gamePanel.getTileSize(), gamePanel.getTileSize());
-
-            up2 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_up_2.png"));
-            up2 = utilityTool.scaleImage(up2, gamePanel.getTileSize(), gamePanel.getTileSize());
-
-            down1 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_down_1.png"));
-            down1 = utilityTool.scaleImage(down1, gamePanel.getTileSize(), gamePanel.getTileSize());
-
-            down2 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_down_2.png"));
-            down2 = utilityTool.scaleImage(down2, gamePanel.getTileSize(), gamePanel.getTileSize());
-
-            left1 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_left_1.png"));
-            left1 = utilityTool.scaleImage(left1, gamePanel.getTileSize(), gamePanel.getTileSize());
-
-            left2 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_left_2.png"));
-            left2 = utilityTool.scaleImage(left2, gamePanel.getTileSize(), gamePanel.getTileSize());
-
-            right1 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_right_1.png"));
-            right1 = utilityTool.scaleImage(right1, gamePanel.getTileSize(), gamePanel.getTileSize());
-
-            right2 = ImageIO.read(getClass().getResourceAsStream("/images/player/boy_right_2.png"));
-            right2 = utilityTool.scaleImage(right2, gamePanel.getTileSize(), gamePanel.getTileSize());
+        File[] fileNames = new File("res/images/player").listFiles();
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        for(int i = 0; i < fileNames.length; i++){
+
+            System.out.println(fileNames[i].getPath());
+            System.out.println(fileNames[i].getName());
+            switch (fileNames[i].getName()) {
+
+
+               // UP
+                case "boy_up_1.png":
+                    up1 = instantiateImages(fileNames[i]);
+                    break;
+                case "boy_up_2.png":
+                    up2 = instantiateImages(fileNames[i]);
+                    break;
+
+
+                // DOWN
+                case "boy_down_1.png":
+                    down1 = instantiateImages(fileNames[i]);
+                    break;
+                case "boy_down_2.png":
+                    down2 = instantiateImages(fileNames[i]);
+                    break;
+
+
+                // LEFT
+                case "boy_left_1.png":
+                    left1 = instantiateImages(fileNames[i]);
+                    break;
+                case "boy_left_2.png":
+                    left2 = instantiateImages(fileNames[i]);
+                    break;
+
+
+                // RIGHT
+                case "boy_right_1.png":
+                    right1 = instantiateImages(fileNames[i]);
+                    break;
+                case "boy_right_2.png":
+                    right2 = instantiateImages(fileNames[i]);
+                    break;
+            }
         }
 
     }
@@ -365,7 +366,6 @@ public class Player extends Entity {
      * This method sets the player's starting position and speed as default if no values are passed into the method.
      * Note** The values X:0, Y:0 are in the upper left corner of the screen and the screen is set to 768x576.
      */
-    @Override
     public void setDefaultValues(){
         worldX = gamePanel.getTileSize() * 23;
         worldY = gamePanel.getTileSize() * 21;

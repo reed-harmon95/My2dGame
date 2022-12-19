@@ -1,5 +1,7 @@
 package main;
 
+import entity.Entity;
+import entity.NPC_OldMan;
 import object.*;
 
 public class AssetManager {
@@ -7,12 +9,14 @@ public class AssetManager {
 
 
     private GamePanel gamePanel;
-    SuperObject[] objectsArray;
+    private SuperObject[] objectsArray;
+    private Entity[] npcArray;
 
 
-    public AssetManager(GamePanel gamePanel, SuperObject[] objects){
+    public AssetManager(GamePanel gamePanel, SuperObject[] objects, Entity[] npcArray){
         this.gamePanel = gamePanel;
         this.objectsArray = objects;
+        this.npcArray = npcArray;
     }
 
 
@@ -68,5 +72,14 @@ public class AssetManager {
         objectsArray[7].setWorldY(22 * gamePanel.getTileSize());
 
         return objectsArray;
+    }
+
+
+    public Entity[] setNPC() {
+        npcArray[0] = new NPC_OldMan(gamePanel);
+        npcArray[0].setWorldX(gamePanel.getTileSize()*21);
+        npcArray[0].setWorldY(gamePanel.getTileSize()*21);
+
+        return npcArray;
     }
 }
