@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     // PLAYER DATA
-    PlayerController playerController = new PlayerController(this);
+    private PlayerController playerController = new PlayerController(this);
     Player player = new Player(this, playerController);
     CollisionHandler collisionHandler = new CollisionHandler(this);
 
@@ -56,12 +56,16 @@ public class GamePanel extends JPanel implements Runnable{
 
     // USER INTERFACE
     UserInterface userInterface = new UserInterface(this);
+    private boolean devOptions = false;
+
 
 
     // GAME STATE
     private int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
+
 
 
 
@@ -221,7 +225,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         // OPTIONAL: CHECK DRAW TIME
         long drawTimeStart = 0;
-        if(playerController.isCheckDrawTime()){
+        if(devOptions == true){
 
             drawTimeStart = System.nanoTime();
         }
@@ -265,13 +269,15 @@ public class GamePanel extends JPanel implements Runnable{
 
 
         // OPTIONAL: CHECK DRAW TIME
-        if(playerController.isCheckDrawTime()){
-            long drawTimeEnd = System.nanoTime();
-            long timePerFrame = drawTimeEnd - drawTimeStart;
+        long drawTimeEnd = System.nanoTime();
+        long timePerFrame = drawTimeEnd - drawTimeStart;
+        if(devOptions == true){
             graphics2D.setColor(Color.white);
             graphics2D.drawString("Draw Time: " + timePerFrame, 10, 400);
-            //System.out.println("Draw Time: " + timePerFrame);
+            System.out.println("Draw Time: " + timePerFrame);
         }
+
+
 
 
 
@@ -372,5 +378,17 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setGameState(int gameState) {
         this.gameState = gameState;
+    }
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public boolean isDevOptions() {
+        return devOptions;
+    }
+
+    public void setDevOptions(boolean devOptions) {
+        this.devOptions = devOptions;
     }
 }

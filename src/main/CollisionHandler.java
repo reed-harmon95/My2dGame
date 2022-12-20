@@ -253,7 +253,17 @@ public class CollisionHandler {
     }
 
 
-
+    /**
+     * This method checks the collision between an entity (entity) and a list of entities (target),
+     * where the entity can be either the player or NPC and the target is the list of current NPCs on the map.
+     *
+     * This is done by checking the currently held move of the entity and checking to see if that will be in the location of the list of targets.
+     *
+     *
+     * @param entity        - Entity being checked (most likely player)
+     * @param target        - List of NPCs
+     * @return              - Index of NPC in NPC array corresponding with the collision, 999 if no collision
+     */
     public int checkEntityCollision(Entity entity, Entity[] target){
         int index = 999;
 
@@ -343,6 +353,14 @@ public class CollisionHandler {
     }
 
 
+
+
+    /**
+     * This method handles the collision in the case that an NPC walks into the player.
+     * Basically, it just checks that the NPC's currently set move is not going to put it in the same tile that the player is currently in.
+     *
+     * @param entity        - Entity that is being checked for movement
+     */
     public void checkNpcCollisionWithPlayer(Entity entity){
 
 

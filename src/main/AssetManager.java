@@ -77,8 +77,8 @@ public class AssetManager {
 
     public Entity[] setNPC() {
         npcArray[0] = new NPC_OldMan(gamePanel);
-        npcArray[0].setWorldX(gamePanel.getTileSize()*21);
-        npcArray[0].setWorldY(gamePanel.getTileSize()*21);
+        npcArray[0].setWorldX(gamePanel.getTileSize()*38);
+        npcArray[0].setWorldY(gamePanel.getTileSize()*12);
 
         return npcArray;
     }

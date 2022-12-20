@@ -22,6 +22,7 @@ public class NPC_OldMan extends Entity{
         name = "Old Man";
 
         getPlayerImages();
+        setDialogue();
     }
 
 
@@ -76,6 +77,17 @@ public class NPC_OldMan extends Entity{
 
 
     @Override
+    public void setDialogue(){
+
+        dialogues[0] = "Hello there";
+        dialogues[1] = "So you have come to this island to find\nthe treasure?";
+        dialogues[2] = "I used to be an adventurer,\nbut my knees and back hurt now.";
+        dialogues[3] = "Good luck out there!";
+
+    }
+
+
+    @Override
     public void setAction() {
 
         actionCounter++;
@@ -98,5 +110,10 @@ public class NPC_OldMan extends Entity{
         }
 
 
+    }
+
+    @Override
+    public void speak(){
+        super.speak();
     }
 }

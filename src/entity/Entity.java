@@ -16,8 +16,8 @@ import java.io.IOException;
  */
 public abstract class Entity {
 
-    protected int worldX, worldY;                                                        //starting coordinates of the entity in relation to the world map
-    protected int speed;                                                                 //movement speed of entity;
+    protected int worldX, worldY;                                                        // coordinates of the entity in relation to the world map
+    protected int speed;                                                                 // movement speed of entity;
     protected String name = "";
 
 
@@ -36,6 +36,11 @@ public abstract class Entity {
     protected Rectangle collisionBox = new Rectangle(0,0,48,48);
     protected boolean collisionOn = false;
     protected int CollisionBoxDefaultX, CollisionBoxDefaultY;                           // these are used to reset the default x/y values of the collision box for an entity when interacting with an object
+
+
+    // DIALOGUE
+    protected String dialogues[] = new String[20];
+    protected int dialogueIndex = 0;
 
 
     protected GamePanel gamePanel;
@@ -75,6 +80,35 @@ public abstract class Entity {
 
     public void setAction(){
 
+    }
+
+    public void setDialogue(){
+
+    }
+
+    public void speak(){
+        facePlayer();
+        gamePanel.getUserInterface().setDisplayDialogue(dialogues[dialogueIndex]);
+        if(dialogues[dialogueIndex+1] !=null){
+            dialogueIndex++;
+        }
+    }
+
+    public void facePlayer(){
+        switch(gamePanel.getPlayer().getDirection()){
+            case "up":
+                direction = "down";
+                break;
+            case "down":
+                direction = "up";
+                break;
+            case "left":
+                direction = "right";
+                break;
+            case "right":
+                direction = "left";
+                break;
+        }
     }
 
     public void update(){
@@ -177,6 +211,26 @@ public abstract class Entity {
                     break;
             }
             graphics2D.drawImage(image, currScreenX, currScreenY, null);
+
+
+            // DEV OPTIONS
+            
+            // this displays the hitbox of the entity
+            if(gamePanel.isDevOptions()){
+                Color newColor = new Color(255,0,0);
+                graphics2D.setColor(newColor);
+                graphics2D.setStroke(new BasicStroke(3));
+                //graphics2D.drawRoundRect(x+5 , y+5, width-10, height-10, 25,25);
+                graphics2D.drawRect(currScreenX + this.collisionBox.x ,
+                        currScreenY + this.collisionBox.y,
+                        this.collisionBox.width , this.collisionBox.height);
+
+                // this displays the entity's coords
+                graphics2D.setColor(Color.white);
+                graphics2D.setFont(new Font("Ariel", Font.BOLD, 14));
+                graphics2D.drawString("(" + this.worldX/gamePanel.getTileSize() + ", " + this.worldY/gamePanel.getTileSize() + ")",
+                        (currScreenX - gamePanel.getTileSize()/4), (currScreenY - gamePanel.getTileSize()/4));
+            }
         }
     }
 
@@ -193,6 +247,8 @@ public abstract class Entity {
             spriteCounter = 0;
         }
     }
+
+
 
     // GETTER AND SETTER
     public int getWorldX() {
