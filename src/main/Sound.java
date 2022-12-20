@@ -28,11 +28,11 @@ public class Sound {
         // Set the indices to the sound array which holds all the file paths to the wav files
 
 
-        File tempFile = new File("/home/reed/Desktop/Projects/Java/My2dGame/res/sound/background/BackgroundMusic.wav");
-        File tempFile1 = new File("/home/reed/Desktop/Projects/Java/My2dGame/res/sound/effects/coin.wav");
-        File tempFile2 = new File("/home/reed/Desktop/Projects/Java/My2dGame/res/sound/effects/fanfare.wav");
-        File tempFile3 = new File("/home/reed/Desktop/Projects/Java/My2dGame/res/sound/effects/powerup.wav");
-        File tempFile4 = new File("/home/reed/Desktop/Projects/Java/My2dGame/res/sound/effects/unlock.wav");
+        File tempFile = new File("res/sound/background/BackgroundMusic.wav");
+        File tempFile1 = new File("res/sound/effects/coin.wav");
+        File tempFile2 = new File("res/sound/effects/fanfare.wav");
+        File tempFile3 = new File("res/sound/effects/powerup.wav");
+        File tempFile4 = new File("res/sound/effects/unlock.wav");
         try {
             soundURL[0] = tempFile.toURI().toURL();
             soundURL[1] = tempFile1.toURI().toURL();
