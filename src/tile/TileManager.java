@@ -35,7 +35,7 @@ public class TileManager {
         mapTileNumbers = new int[gamePanel.getMaxWorldColumns()][gamePanel.getMaxWorldRows()];
 
         getTileImage();
-        loadIntegerMap("/home/reed/Desktop/Projects/Java/My2dGame/res/images/maps/world01V2.txt");
+        loadIntegerMap("res/images/maps/world01V2.txt");
 
     }
 
