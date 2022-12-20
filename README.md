@@ -57,4 +57,7 @@ Currently implemented:
     12/17
     
             - Small tweak to the rendering algorithm to slightly improve performance
-            
+            - Added NPCs with collision and movement
+            - Added game state for pause functionality
+            - Updated images and map system. Maps utilize two-digit integers instead of single-digit
+
