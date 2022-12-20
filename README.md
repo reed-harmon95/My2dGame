@@ -60,4 +60,14 @@ Currently implemented:
             - Added NPCs with collision and movement
             - Added game state for pause functionality
             - Updated images and map system. Maps utilize two-digit integers instead of single-digit
+            
+    12/20
+    
+            - Added dialogue system to display NPC dialogue to screen when player collides with NPC and hits ENTER button
+            - Added some helpful things to look at when fixing issues during runtime. Hit SPACEBAR to display
+            - Helpful options include:
+                            - Displaying player and visible entity collision boxes
+                            - Displaying player and NPC coordinates on map
+                            - Displaying time it takes to draw frame to screen in nanoseconds
+                    
 
