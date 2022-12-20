@@ -107,7 +107,7 @@ public class Player extends Entity {
 
 
             //if collision false, continue moving
-            if(collisionOn == false){
+            if(collisionOn == false && playerController.isEnteredPressed() == false){
 
                 switch (direction){
                     case "up":
@@ -127,6 +127,8 @@ public class Player extends Entity {
                         break;
                 }
             }
+
+            playerController.setEnteredPressed(false);
 
 
 
@@ -192,6 +194,16 @@ public class Player extends Entity {
 
         //Finally, draw image to screen
         graphics2D.drawImage(image, screenX, screenY, null);
+
+
+        if(gamePanel.isDevOptions()){
+
+            graphics2D.setColor(Color.white);
+            graphics2D.setStroke(new BasicStroke(3));
+            graphics2D.drawRect(screenX + collisionBox.x , screenY + collisionBox.y , collisionBox.width , collisionBox.height);
+        }
+
+
     }
 
 
@@ -271,12 +283,26 @@ public class Player extends Entity {
     }
 
 
+    /**
+     * This method handles NPC interaction with the player
+     *
+     * @param index     - Index of the NPC being interacted with in the NPC array
+     */
     public void interactNPC(int index){
 
 
         if(index != 999){
-            //System.out.println("You are hitting npc");
+
+            if(gamePanel.getPlayerController().isEnteredPressed() == true){
+                gamePanel.setGameState(gamePanel.dialogueState);
+                gamePanel.npcArray[index].speak();
+            }
+
+
         }
+
+        // reset entered pressed
+        //gamePanel.getPlayerController().setEnteredPressed(false);
     }
 
 
@@ -387,6 +413,9 @@ public class Player extends Entity {
         super.setDefaultValues(x, y, speed, direction);
     }
 
+
+
+    // GETTERS AND SETTERS
     @Override
     public int getWorldX() {
         return super.getWorldX();

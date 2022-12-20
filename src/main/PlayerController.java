@@ -17,6 +17,8 @@ public class PlayerController implements KeyListener {
     private boolean leftPressed;
     private boolean rightPressed;
     private boolean isMuted = false;
+    private boolean enteredPressed = false;
+    private boolean spacePressed = false;
 
 
     // Debug
@@ -48,48 +50,83 @@ public class PlayerController implements KeyListener {
         int code = keyEvent.getKeyCode();
 
 
-        // MOVEMENT
-        if(code == KeyEvent.VK_W){
-            upPressed = true;
-        }
-        if(code == KeyEvent.VK_A){
-            leftPressed = true;
-        }
-        if(code == KeyEvent.VK_S){
-            downPressed = true;
-        }
-        if(code == KeyEvent.VK_D){
-            rightPressed = true;
-        }
-        if(code == KeyEvent.VK_M && isMuted == false){
-            isMuted = true;
-            System.out.println("Muted: " + isMuted);
-        } else if (code == KeyEvent.VK_M && isMuted == true) {
-            isMuted = false;
-            System.out.println("Muted: " + isMuted);
-        }
+
+        // PLAY STATE
+        // CONTROLS
+        if(gamePanel.getGameState() == gamePanel.playState){
+
+            // MOVEMENT
+            if(code == KeyEvent.VK_W){
+                upPressed = true;
+            }
+            if(code == KeyEvent.VK_A){
+                leftPressed = true;
+            }
+            if(code == KeyEvent.VK_S){
+                downPressed = true;
+            }
+            if(code == KeyEvent.VK_D){
+                rightPressed = true;
+            }
+            if(code == KeyEvent.VK_ENTER){
+                enteredPressed = true;
+            }
 
 
-        // GAME STATE
-        if(code == KeyEvent.VK_P){
+            if(code == KeyEvent.VK_M && isMuted == false){
+                isMuted = true;
+                System.out.println("Muted: " + isMuted);
+            } else if (code == KeyEvent.VK_M && isMuted == true) {
+                isMuted = false;
+                System.out.println("Muted: " + isMuted);
+            }
 
-            // if playing, set to pause and vice versa
-            if(gamePanel.getGameState() == gamePanel.playState){
+
+
+            // DEV OPTIONS
+            if(code == KeyEvent.VK_SPACE && gamePanel.isDevOptions() == false){
+                gamePanel.setDevOptions(true);
+                checkDrawTime = true;
+            } else if (code == KeyEvent.VK_SPACE && gamePanel.isDevOptions() == true) {
+                gamePanel.setDevOptions(false);
+                checkDrawTime = false;
+            }
+
+
+            // TOGGLE PAUSE
+            if(code == KeyEvent.VK_P){
+
                 gamePanel.setGameState(gamePanel.pauseState);
-            } else if(gamePanel.getGameState() == gamePanel.pauseState){
+            }
+        }
+
+
+
+        // PAUSE STATE
+        // CONTROLS
+        else if(gamePanel.getGameState() == gamePanel.pauseState){
+
+
+            // TOGGLE PAUSE
+            if(code == KeyEvent.VK_P){
+
                 gamePanel.setGameState(gamePanel.playState);
             }
         }
 
 
-        // OPTIONAL: CHECK DRAW TIME
-        if(code == KeyEvent.VK_T){
-            if(checkDrawTime == true){
-                checkDrawTime = false;
-            } else if(checkDrawTime == false){
-                checkDrawTime = true;
+
+        // DIALOGUE STATE
+        // CONTROLS
+       else  if(gamePanel.getGameState() == gamePanel.dialogueState){
+            if(code == KeyEvent.VK_ENTER){
+                gamePanel.setGameState(gamePanel.playState);
             }
         }
+
+
+
+
     }
 
 
@@ -146,5 +183,13 @@ public class PlayerController implements KeyListener {
 
     public boolean isCheckDrawTime() {
         return checkDrawTime;
+    }
+
+    public boolean isEnteredPressed() {
+        return enteredPressed;
+    }
+
+    public void setEnteredPressed(boolean enteredPressed) {
+        this.enteredPressed = enteredPressed;
     }
 }
