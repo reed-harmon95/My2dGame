@@ -62,7 +62,7 @@ public class TileManager {
         // giving a wrong index to a tile type would destroy the pre-made map
         for(int i = 0; i < fileNames.length; i++){
 
-            System.out.println(fileNames[i].getPath());
+            //System.out.println(fileNames[i].getPath());
             switch (fileNames[i].getName()){
 
 
@@ -163,7 +163,7 @@ public class TileManager {
 
 
 
-
+                // OTHER
                 case "wall.png":
                     tileSetup(40, fileNames[i], true);
                     break;
