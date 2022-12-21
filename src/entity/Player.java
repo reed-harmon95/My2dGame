@@ -319,8 +319,7 @@ public class Player extends Entity {
 
         for(int i = 0; i < fileNames.length; i++){
 
-            System.out.println(fileNames[i].getPath());
-            System.out.println(fileNames[i].getName());
+
             switch (fileNames[i].getName()) {
 
 
@@ -452,4 +451,6 @@ public class Player extends Entity {
     public int getNumberOfKeys() {
         return numberOfKeys;
     }
+
+
 }

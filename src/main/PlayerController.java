@@ -50,6 +50,50 @@ public class PlayerController implements KeyListener {
         int code = keyEvent.getKeyCode();
 
 
+        // TITLE STATE
+        // CONTROLS
+        if(gamePanel.getGameState() == gamePanel.titleScreenState){
+            if(code == KeyEvent.VK_W){
+                if(gamePanel.getUserInterface().getMainMenuSelector() == 0){
+                    gamePanel.getUserInterface().setMainMenuSelector(2);
+                }
+                else {
+                    gamePanel.getUserInterface().setMainMenuSelector(gamePanel.getUserInterface().getMainMenuSelector()-1);
+                }
+            }
+            if(code == KeyEvent.VK_S){
+                if(gamePanel.getUserInterface().getMainMenuSelector() == 2){
+                    gamePanel.getUserInterface().setMainMenuSelector(0);
+                }
+                else {
+                    gamePanel.getUserInterface().setMainMenuSelector(gamePanel.getUserInterface().getMainMenuSelector()+1);
+                }
+
+            }
+            if(code == KeyEvent.VK_ENTER){
+                switch(gamePanel.getUserInterface().getMainMenuSelector()){
+
+                    // select new game
+                    case 0:
+                        gamePanel.setGameState(gamePanel.playState);
+                        gamePanel.playBackgroundMusic(0);
+                        break;
+
+                    // select load game
+                    case 1:
+                        System.out.println("Error: Cannot Load Game");
+                        break;
+
+                    // select quit
+                    case 2:
+                        System.exit(0);
+                        break;
+                }
+            }
+        }
+
+
+
 
         // PLAY STATE
         // CONTROLS

@@ -62,9 +62,11 @@ public class GamePanel extends JPanel implements Runnable{
 
     // GAME STATE
     private int gameState;
+    public final int titleScreenState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+
 
 
 
@@ -99,9 +101,9 @@ public class GamePanel extends JPanel implements Runnable{
 
 
         // Play background music
-        playBackgroundMusic(0);
-        isPlayingBackgroundMusic = true;
-        gameState = playState;
+        //playBackgroundMusic(0);
+        //isPlayingBackgroundMusic = true;
+        gameState = titleScreenState;
     }
 
 
@@ -170,12 +172,12 @@ public class GamePanel extends JPanel implements Runnable{
             }
 
 
-
+            /*
             if(playerController.isMuted() == true && isPlayingBackgroundMusic == true){
                 music.muteVolume();
             } else if(playerController.isMuted() == false && isPlayingBackgroundMusic == false) {
                 playBackgroundMusic(0);
-            }
+            } */
         }
 
     }
@@ -223,7 +225,7 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(graphics);
 
 
-        // OPTIONAL: CHECK DRAW TIME
+        // CHECK DRAW TIME
         long drawTimeStart = 0;
         if(devOptions == true){
 
@@ -231,44 +233,51 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
 
-
-
         // SET UP GRAPICS2D
         Graphics2D graphics2D = (Graphics2D) graphics;
 
 
-        // DRAW TILES
-        //NOTE** This should be done before drawing the player character so the player character is on top of the tiles
-        tileManager.draw(graphics2D);
-
-
-        //drawing object to screen
-        //loop through the objects array
-        //if the object in the array is instantiated, draw it ot the screen
-        for(int i = 0; i < objects.length; i++){
-            if(objects[i] != null){
-                objects[i].draw(graphics2D, this);
-            }
-        }
-
-        for(int i = 0; i < npcArray.length; i++){
-            if(npcArray[i] != null){
-                npcArray[i].draw(graphics2D);
-            }
+        // TITLE SCREEN STATE
+        if(gameState == titleScreenState){
+            userInterface.draw(graphics2D);
         }
 
 
+        // PLAY GAME STATE
+        else {
 
 
-        // DRAW PLAYER
-        player.draw(graphics2D);
+            // DRAW TILES
+            //NOTE** This should be done before drawing the player character so the player character is on top of the tiles
+            tileManager.draw(graphics2D);
 
 
-        // DRAW UI
-        userInterface.draw(graphics2D);
+            // DRAW OBJECTS
+            for(int i = 0; i < objects.length; i++){
+                if(objects[i] != null){
+                    objects[i].draw(graphics2D, this);
+                }
+            }
 
 
-        // OPTIONAL: CHECK DRAW TIME
+            // DRAW NPCS
+            for(int i = 0; i < npcArray.length; i++){
+                if(npcArray[i] != null){
+                    npcArray[i].draw(graphics2D);
+                }
+            }
+
+
+            // DRAW PLAYER
+            player.draw(graphics2D);
+
+
+            // DRAW UI
+            userInterface.draw(graphics2D);
+        }
+
+
+        // CHECK DRAW TIME
         long drawTimeEnd = System.nanoTime();
         long timePerFrame = drawTimeEnd - drawTimeStart;
         if(devOptions == true){
@@ -278,14 +287,18 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
 
-
-
-
-        //cleanup object once done drawing
+        // CLEANUP
         graphics2D.dispose();
     }
 
 
+    /**
+     * This method plays music in the background given an input representing the index of a sound file in an array holding the sound files.
+     * The setFile method loads the sound file to be played and then the file is then played and looped.
+     *
+     *
+     * @param index     - Index of the file to be loaded into the Sound class to be played.
+     */
     public void playBackgroundMusic(int index) {
 
 
@@ -294,11 +307,26 @@ public class GamePanel extends JPanel implements Runnable{
         music.loop();
     }
 
+
+    /**
+     * This method is to stop a file from being currently played given an input representing the index of the sound file in an array of sound files.
+     * The index loads the file into the sound class to be stopped playing.
+     *
+     *
+     * @param index     - Index of the file to be loaded into the Sound class to be stopped.
+     */
     public void stopBackgroundMusic(int index){
         music.setFile(index);
         music.stop();
     }
 
+
+    /**
+     * This method plays a sound file as a sound effect which is similar to the background music method, but the main difference is that the music is not looped.
+     *
+     *
+     * @param index     - Index of the file to be loaded into the Sound class and played once.
+     */
     public void playSoundEffect(int index){
 
 

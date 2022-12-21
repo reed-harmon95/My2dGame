@@ -306,4 +306,9 @@ public abstract class Entity {
     public String getName() {
         return name;
     }
+
+
+    public BufferedImage getDown1() {
+        return down1;
+    }
 }

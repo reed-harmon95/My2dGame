@@ -32,6 +32,10 @@ public class UserInterface {
     double playTime;
     DecimalFormat playTimeFormat = new DecimalFormat("#0.00");
 
+
+    // MAIN MENU
+    private int mainMenuSelector = 0;
+
     public UserInterface(GamePanel gamePanel){
         this.gamePanel = gamePanel;
         screenFont = new Font("Arial", Font.PLAIN, 32);
@@ -61,16 +65,22 @@ public class UserInterface {
         graphics2D.setFont(screenFont);
 
 
+        // TITLE SCREEN STATE
+        if(gamePanel.getGameState() == gamePanel.titleScreenState){
+            drawTitleScreen(graphics2D);
+        }
+
+
         // PLAY STATE
         if(gamePanel.getGameState() == gamePanel.playState){
 
-            /*
+
             // DEV OPTIONS
             if(gamePanel.isDevOptions()){
                 playTime += (double) 1/60;
                 graphics2D.drawString("Time: " + playTimeFormat.format(playTime), gamePanel.getTileSize()*11, 65);
                 graphics2D.drawString("(X,Y): " + gamePanel.getPlayer().getWorldX()/gamePanel.getTileSize() + " " + gamePanel.getPlayer().getWorldY()/ gamePanel.getTileSize(), gamePanel.getTileSize()*1, 65);
-            }*/
+            }
 
 
 
@@ -103,6 +113,67 @@ public class UserInterface {
 
 
         }
+    }
+
+
+    public void drawTitleScreen(Graphics2D graphics2D) {
+
+
+        // BACKGROUND COLOR
+        graphics2D.setColor(Color.BLACK);
+        graphics2D.fillRect(0,0,gamePanel.getScreenWidth(), gamePanel.getScreenHeight());
+
+
+        // GAME TITLE
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD,48F));
+        String text = "Top-Down Demo Game";
+        int x = getXValueForCenteredText(text, graphics2D);
+        int y = gamePanel.getTileSize()*3;
+
+
+        // SHADOW
+        graphics2D.setColor(Color.gray);
+        graphics2D.drawString(text, x+3, y+3);
+
+
+        // MAIN TEXT
+        graphics2D.setColor(Color.white);
+        graphics2D.drawString(text, x, y);
+
+
+        // PLAYER IMAGE
+        x = gamePanel.getScreenWidth()/2 - (gamePanel.getTileSize()*2)/2;
+        y += gamePanel.getTileSize()*2;
+        graphics2D.drawImage(gamePanel.getPlayer().getDown1(), x, y, gamePanel.getTileSize()*2, gamePanel.getTileSize()*2, null);
+
+
+
+        // MENU
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 24F));
+        text = "New Game";
+        x = getXValueForCenteredText(text, graphics2D);
+        y += gamePanel.getTileSize()*3.5;
+        graphics2D.drawString(text, x, y);
+        if(mainMenuSelector == 0){
+            graphics2D.drawString(">", (int) (x - (gamePanel.getTileSize()*0.75)), y);
+        }
+
+        text = "Load Game";
+        x = getXValueForCenteredText(text, graphics2D);
+        y += gamePanel.getTileSize()*0.85;
+        graphics2D.drawString(text, x, y);
+        if(mainMenuSelector == 1){
+            graphics2D.drawString(">", (int) (x - (gamePanel.getTileSize()*0.75)), y);
+        }
+
+        text = "Quit";
+        x = getXValueForCenteredText(text, graphics2D);
+        y += gamePanel.getTileSize()*0.85;
+        graphics2D.drawString(text, x, y);
+        if(mainMenuSelector == 2){
+            graphics2D.drawString(">", (int) (x - (gamePanel.getTileSize()*0.75)), y);
+        }
+
     }
 
 
@@ -232,7 +303,15 @@ public class UserInterface {
         this.gameFinished = gameFinished;
     }
 
-    public void setDisplayDialogue(String displayDialgoue) {
-        this.displayDialogue = displayDialgoue;
+    public void setDisplayDialogue(String displayDialogue) {
+        this.displayDialogue = displayDialogue;
+    }
+
+    public int getMainMenuSelector() {
+        return mainMenuSelector;
+    }
+
+    public void setMainMenuSelector(int mainMenuSelector) {
+        this.mainMenuSelector = mainMenuSelector;
     }
 }
