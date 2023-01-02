@@ -12,6 +12,14 @@ import java.awt.*;
 /**
  * This class handles the game screen. It contains the main gameplay loop that is run via a thread
  * and contains all necessary data to keep the game running.
+ *
+ * An instance of this class is needed in almost all other classes that interact with the game world in some capacity.
+ *
+ * The main parts of this class are:
+ *          - InitialSetup method which loads data once before the gameplay loop starts
+ *          - Run method which handles the main gameplay loop (Update, repaint)
+ *          - Update method which handles modifying the game data every frame
+ *          - PaintComponent method which handles painting the appropriate graphics to the screen each frame
  */
 public class GamePanel extends JPanel implements Runnable{
 
@@ -66,6 +74,10 @@ public class GamePanel extends JPanel implements Runnable{
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+
+
+    // EVENTS
+    EventManager eventManager = new EventManager(this);
 
 
 
@@ -166,7 +178,7 @@ public class GamePanel extends JPanel implements Runnable{
 
             //every second display the fps
             if(timer >= 1000000000){
-                System.out.println("FPS: " + drawCount);
+
                 drawCount = 0;
                 timer = 0;
             }
@@ -268,12 +280,16 @@ public class GamePanel extends JPanel implements Runnable{
             }
 
 
+
             // DRAW PLAYER
             player.draw(graphics2D);
 
 
             // DRAW UI
             userInterface.draw(graphics2D);
+
+
+
         }
 
 
@@ -283,7 +299,7 @@ public class GamePanel extends JPanel implements Runnable{
         if(devOptions == true){
             graphics2D.setColor(Color.white);
             graphics2D.drawString("Draw Time: " + timePerFrame, 10, 400);
-            System.out.println("Draw Time: " + timePerFrame);
+
         }
 
 
@@ -418,5 +434,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setDevOptions(boolean devOptions) {
         this.devOptions = devOptions;
+    }
+
+    public EventManager getEventManager() {
+        return eventManager;
     }
 }

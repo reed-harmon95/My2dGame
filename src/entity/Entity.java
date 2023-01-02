@@ -10,8 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * This class represents an entity which can be the player or NPC. This class is abstract, so it doesn't accidentally
- * get instantiated in the rest of the program. It should only be inherited by other classes.
+ * This class represents an entity which can be the player or NPC.
+ * This class is abstract as it is mainly just a parent class to hold shared data between the player and NPC classes.
  *
  */
 public abstract class Entity {
@@ -33,7 +33,7 @@ public abstract class Entity {
 
 
     // COLLISION
-    protected Rectangle collisionBox = new Rectangle(0,0,48,48);
+    public Rectangle collisionBox = new Rectangle(0,0,48,48);
     protected boolean collisionOn = false;
     protected int CollisionBoxDefaultX, CollisionBoxDefaultY;                           // these are used to reset the default x/y values of the collision box for an entity when interacting with an object
 
@@ -43,20 +43,17 @@ public abstract class Entity {
     protected int dialogueIndex = 0;
 
 
+    // CHARACTER STATUS
+    protected int maxLife;
+    protected int currentLife;
+
+
     protected GamePanel gamePanel;
 
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
     }
 
-
-
-    public void setDefaultValues(int x, int y, int speed, String direction){
-        this.worldX = x;
-        this.worldY = y;
-        this.speed = speed;
-        this.direction = direction;
-    }
 
 
     public BufferedImage instantiateImages(File fileName){
@@ -85,6 +82,8 @@ public abstract class Entity {
     public void setDialogue(){
 
     }
+
+
 
     public void speak(){
         facePlayer();
@@ -116,6 +115,8 @@ public abstract class Entity {
 
         setAction();
 
+
+        // NPC COLLISION
         collisionOn = false;
         gamePanel.getCollisionHandler().checkTileCollision(this);
         gamePanel.getCollisionHandler().checkObjectCollision(this, false);
@@ -227,9 +228,14 @@ public abstract class Entity {
 
                 // this displays the entity's coords
                 graphics2D.setColor(Color.white);
-                graphics2D.setFont(new Font("Ariel", Font.BOLD, 14));
+                graphics2D.setFont(new Font("Ariel", Font.BOLD, 12));
                 graphics2D.drawString("(" + this.worldX/gamePanel.getTileSize() + ", " + this.worldY/gamePanel.getTileSize() + ")",
-                        (currScreenX - gamePanel.getTileSize()/4), (currScreenY - gamePanel.getTileSize()/4));
+                        (currScreenX - gamePanel.getTileSize()/4), (currScreenY - gamePanel.getTileSize()/3));
+
+                // this displays the entity's direction
+                graphics2D.setColor(Color.white);
+                graphics2D.drawString("Direction: " + this.direction,
+                        (currScreenX - gamePanel.getTileSize()/4), (currScreenY - gamePanel.getTileSize()/9));
             }
         }
     }
@@ -307,8 +313,25 @@ public abstract class Entity {
         return name;
     }
 
-
     public BufferedImage getDown1() {
         return down1;
     }
+
+    public int getMaxLife() {
+        return maxLife;
+    }
+
+    public void setMaxLife(int maxLife) {
+        this.maxLife = maxLife;
+    }
+
+    public int getCurrentLife() {
+        return currentLife;
+    }
+
+    public void setCurrentLife(int currentLife) {
+        this.currentLife = currentLife;
+    }
+
+
 }
