@@ -8,6 +8,12 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
+/**
+ * The Sound class handles playing audio files at certain times during the gameplay loop.
+ * The files that are played can be either background music which loops or sound effects which are played once.
+ * The files are loaded and held within an array for access.
+ */
 public class Sound {
 
     Clip clip;

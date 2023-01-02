@@ -56,8 +56,24 @@ public class Player extends Entity {
         super.CollisionBoxDefaultX = collisionBox.x;
         super.CollisionBoxDefaultY = collisionBox.y;
 
+
+
         setDefaultValues();
         getPlayerImages();
+    }
+
+
+    /**
+     * This method sets the player's starting position and speed as default if no values are passed into the method.
+     * Note** The values X:0, Y:0 are in the upper left corner of the screen and the screen is set to 768x576.
+     */
+    public void setDefaultValues(){
+        worldX = gamePanel.getTileSize() * 23;
+        worldY = gamePanel.getTileSize() * 21;
+        speed = 4;
+        direction = "down";
+        maxLife = 6;
+        currentLife = maxLife;
     }
 
 
@@ -106,6 +122,11 @@ public class Player extends Entity {
             interactNPC(npcIndex);
 
 
+            // check event collision
+            gamePanel.getEventManager().checkEvent();
+            playerController.setEnteredPressed(false);
+
+
             //if collision false, continue moving
             if(collisionOn == false && playerController.isEnteredPressed() == false){
 
@@ -128,7 +149,7 @@ public class Player extends Entity {
                 }
             }
 
-            playerController.setEnteredPressed(false);
+
 
 
 
@@ -196,12 +217,7 @@ public class Player extends Entity {
         graphics2D.drawImage(image, screenX, screenY, null);
 
 
-        if(gamePanel.isDevOptions()){
 
-            graphics2D.setColor(Color.white);
-            graphics2D.setStroke(new BasicStroke(3));
-            graphics2D.drawRect(screenX + collisionBox.x , screenY + collisionBox.y , collisionBox.width , collisionBox.height);
-        }
 
 
     }
@@ -297,12 +313,7 @@ public class Player extends Entity {
                 gamePanel.setGameState(gamePanel.dialogueState);
                 gamePanel.npcArray[index].speak();
             }
-
-
         }
-
-        // reset entered pressed
-        //gamePanel.getPlayerController().setEnteredPressed(false);
     }
 
 
@@ -387,33 +398,6 @@ public class Player extends Entity {
 
 
 
-    /**
-     * This method sets the player's starting position and speed as default if no values are passed into the method.
-     * Note** The values X:0, Y:0 are in the upper left corner of the screen and the screen is set to 768x576.
-     */
-    public void setDefaultValues(){
-        worldX = gamePanel.getTileSize() * 23;
-        worldY = gamePanel.getTileSize() * 21;
-        speed = 4;
-        direction = "down";
-    }
-
-
-    /**
-     * This method sets the starting position and speed of player given the input values passed into the method.
-     * Note** The values X:0, Y:0 are in the upper left corner of the screen and the screen is set to 768x576.
-     *
-     * @param x         - starting x-axis value
-     * @param y         - starting y-axis value
-     * @param speed     - number of pixels traversed per frame per key press.
-     */
-    @Override
-    public void setDefaultValues(int x, int y, int speed, String direction){
-        super.setDefaultValues(x, y, speed, direction);
-    }
-
-
-
     // GETTERS AND SETTERS
     @Override
     public int getWorldX() {
@@ -451,6 +435,12 @@ public class Player extends Entity {
     public int getNumberOfKeys() {
         return numberOfKeys;
     }
+
+
+
+
+
+
 
 
 }

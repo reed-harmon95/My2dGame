@@ -1,6 +1,8 @@
 package main;
 
+import object.Object_Heart;
 import object.Object_Key;
+import object.SuperObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,7 +13,7 @@ public class UserInterface {
 
 
     GamePanel gamePanel;
-    Font screenFont, gameWonFont, gamePauseFont;
+    Font screenFont, gameWonFont, gamePauseFont,  metricsFont;
 
 
     // DISPLAY ITEM MESSAGE
@@ -36,12 +38,24 @@ public class UserInterface {
     // MAIN MENU
     private int mainMenuSelector = 0;
 
+
+    // PLAYER HEALTH
+    BufferedImage heartFull, heartHalf, heartBlank;
+
+
     public UserInterface(GamePanel gamePanel){
         this.gamePanel = gamePanel;
-        screenFont = new Font("Arial", Font.PLAIN, 32);
+        screenFont = new Font("Arial", Font.PLAIN, 24);
+        metricsFont = new Font("Arial", Font.BOLD, 16);
         gameWonFont = new Font("Arial", Font.BOLD, 48);
         gamePauseFont = new Font("Arial", Font.BOLD, 48);
 
+
+        // CREATE HUD OBJECTS
+        SuperObject heart = new Object_Heart(gamePanel);
+        heartFull = heart.getImage();                                           // specifically corresponds to image (check Object_Heart class for reference)
+        heartHalf = heart.getImage2();                                          // specifically corresponds to image2
+        heartBlank = heart.getImage3();                                         // specifically corresponds to image3
     }
 
 
@@ -75,28 +89,21 @@ public class UserInterface {
         if(gamePanel.getGameState() == gamePanel.playState){
 
 
+            // DRAW PLAYER HEALTH
+            drawPlayerHealth(graphics2D);
+
+
+
             // DEV OPTIONS
             if(gamePanel.isDevOptions()){
-                playTime += (double) 1/60;
-                graphics2D.drawString("Time: " + playTimeFormat.format(playTime), gamePanel.getTileSize()*11, 65);
-                graphics2D.drawString("(X,Y): " + gamePanel.getPlayer().getWorldX()/gamePanel.getTileSize() + " " + gamePanel.getPlayer().getWorldY()/ gamePanel.getTileSize(), gamePanel.getTileSize()*1, 65);
+                drawDevOptions(graphics2D);
+                graphics2D.setFont(screenFont);
             }
-
 
 
             // ITEM MESSAGE
             if(itemMessageOn == true){
-                graphics2D.setFont(graphics2D.getFont().deriveFont(30F));
-                graphics2D.drawString(itemMessage, gamePanel.getTileSize()/2, gamePanel.getTileSize()*5);
-                messageTimer++;
-
-                // timer for how long the item message stays on the screen (1.5 seconds)
-                if(messageTimer > 90){
-                    messageTimer = 0;
-                    itemMessage = "";
-                    itemMessageOn = false;
-                }
-
+                drawItemMessage(graphics2D);
             }
         }
 
@@ -110,9 +117,87 @@ public class UserInterface {
         // DIALOGUE STATE
         if(gamePanel.getGameState() == gamePanel.dialogueState) {
             drawDialogueScreen(graphics2D);
+        }
+    }
 
+
+
+
+    public void drawPlayerHealth(Graphics2D graphics2D){
+
+        int x = gamePanel.getTileSize()/2;
+        int y = gamePanel.getTileSize()/2;
+        int i = 0;
+
+
+        // DRAW MAX LIFE
+        while(i < gamePanel.getPlayer().getMaxLife()/2){
+            graphics2D.drawImage(heartBlank, x, y, null);
+            i++;
+            x+= gamePanel.getTileSize();
+        }
+
+
+        // RESET
+        x = gamePanel.getTileSize()/2;
+        y = gamePanel.getTileSize()/2;
+        i = 0;
+
+
+        // DRAW CURRENT LIFE
+        while(i < gamePanel.getPlayer().getCurrentLife()) {
+
+            // start by drawing half heart
+            graphics2D.drawImage(heartHalf, x, y, null);
+            i++;
+
+            // if not sufficient, draw full heart
+            if(i < gamePanel.getPlayer().getCurrentLife()){
+                graphics2D.drawImage(heartFull, x, y, null);
+            }
+            i++;
+            x+= gamePanel.getTileSize();
 
         }
+
+    }
+
+
+    public void drawDevOptions(Graphics2D graphics2D){
+        graphics2D.setFont(metricsFont);
+        int yAlign = 65;
+        int yFontHeight = graphics2D.getFontMetrics().getHeight();
+
+
+        // PLAY TIME
+        playTime += (double) 1/60;
+        graphics2D.drawString("Time: " + playTimeFormat.format(playTime), gamePanel.getTileSize()*11, yAlign);
+        yAlign += yFontHeight;
+
+        // PLAYER COORDINATES AND DIRECTION
+        graphics2D.drawString("(X,Y): " + gamePanel.getPlayer().getWorldX()/gamePanel.getTileSize() + " " + gamePanel.getPlayer().getWorldY()/ gamePanel.getTileSize(),
+                gamePanel.getTileSize()*11, yAlign );
+        yAlign += yFontHeight;
+        graphics2D.drawString("Direction: " + gamePanel.getPlayer().getDirection(), gamePanel.getTileSize()*11, yAlign );
+        yAlign += yFontHeight;
+        graphics2D.drawString("PX (X,Y): " + gamePanel.getPlayer().getWorldX() + " " + gamePanel.getPlayer().getWorldY(),
+                gamePanel.getTileSize()*11, yAlign );
+
+        // PLAYER COLLISION BOX
+        graphics2D.setColor(Color.orange);
+        graphics2D.setStroke(new BasicStroke(3));
+        graphics2D.drawRect(gamePanel.getPlayer().getScreenX() + gamePanel.getPlayer().getCollisionBox().x ,
+                gamePanel.getPlayer().getScreenY() + gamePanel.getPlayer().getCollisionBox().y ,
+                gamePanel.getPlayer().getCollisionBox().width ,gamePanel.getPlayer().getCollisionBox().height);
+
+
+
+        graphics2D.setColor(Color.red);
+        graphics2D.setStroke(new BasicStroke(3));
+        graphics2D.drawRect(25 * gamePanel.getTileSize(),
+                gamePanel.getPlayer().getScreenY() + gamePanel.getPlayer().getCollisionBox().y +45,
+                gamePanel.getPlayer().getCollisionBox().width +15 ,gamePanel.getPlayer().getCollisionBox().height + 15);
+
     }
 
 
@@ -254,6 +339,22 @@ public class UserInterface {
     }
 
 
+
+    public void drawItemMessage(Graphics2D graphics2D){
+        graphics2D.setColor(Color.white);
+        graphics2D.setFont(graphics2D.getFont().deriveFont(30F));
+        graphics2D.drawString(itemMessage, gamePanel.getTileSize()/2, gamePanel.getTileSize()*5);
+        messageTimer++;
+
+        // timer for how long the item message stays on the screen (1.5 seconds)
+        if(messageTimer > 90){
+            messageTimer = 0;
+            itemMessage = "";
+            itemMessageOn = false;
+        }
+    }
+
+
     /**
      * This just creates a message if the player collides with a game object in the world.
      * This message then gets written on the screen in the draw method of this class
@@ -314,4 +415,6 @@ public class UserInterface {
     public void setMainMenuSelector(int mainMenuSelector) {
         this.mainMenuSelector = mainMenuSelector;
     }
+
+
 }

@@ -9,6 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * This class represents a specific NPC who wanders the game world.
+ * He is a neutral NPC who wanders and can talk with the player.
+ */
 public class NPC_OldMan extends Entity{
 
 

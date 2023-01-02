@@ -6,10 +6,14 @@ import main.Utility;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+
+/**
+ * This is a parent class to all objects used within the game world.
+ */
 public abstract class SuperObject {
 
     // OBJECT DATA FOR DRAWING TO SCREEN
-    protected BufferedImage image;
+    protected BufferedImage image, image2, image3;
     protected String name;
     protected int worldX, worldY;
     protected Utility utilityTool = new Utility();
@@ -49,6 +53,14 @@ public abstract class SuperObject {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public BufferedImage getImage2() {
+        return image2;
+    }
+
+    public BufferedImage getImage3() {
+        return image3;
     }
 
     public void setImage(BufferedImage image) {

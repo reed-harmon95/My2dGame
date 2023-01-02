@@ -4,6 +4,11 @@ import entity.Entity;
 import entity.NPC_OldMan;
 import object.*;
 
+
+/**
+ * The AssetManager class handles creating instances of game objects, NPCs, etc.
+ * This is done by creating the instances of the assets and storing them within their respective arrays for use in the main program.
+ */
 public class AssetManager {
 
 
