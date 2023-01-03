@@ -86,3 +86,8 @@ Currently implemented:
                                     - Healing Pool
                                     - Teleport
 
+    1/3:
+    
+            - Reworked the rendering algorithm to allow for the player to appear behind entities when standing directly behind them(in the case the entity's collision box is smaller than the image representing the entity)
+            - Moved all classes inheriting the SuperObject class to inheriting the Entity class
+
