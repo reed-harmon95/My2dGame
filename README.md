@@ -1,6 +1,6 @@
 # My2dGame
 
-This is just a simple 2d game demo written in java.
+This is just a simple 2d game demo written in java-11.
 
 Credit to this tutorial: https://www.youtube.com/playlist?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq
 
