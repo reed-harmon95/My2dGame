@@ -1,5 +1,6 @@
 package main;
 
+import entity.Entity;
 import object.Object_Heart;
 import object.Object_Key;
 import object.SuperObject;
@@ -52,7 +53,7 @@ public class UserInterface {
 
 
         // CREATE HUD OBJECTS
-        SuperObject heart = new Object_Heart(gamePanel);
+        Entity heart = new Object_Heart(gamePanel);
         heartFull = heart.getImage();                                           // specifically corresponds to image (check Object_Heart class for reference)
         heartHalf = heart.getImage2();                                          // specifically corresponds to image2
         heartBlank = heart.getImage3();                                         // specifically corresponds to image3

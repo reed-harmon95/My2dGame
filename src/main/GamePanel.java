@@ -7,6 +7,9 @@ import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -51,9 +54,10 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     // GAME OBJECTS / ENTITY
-    public SuperObject objects[] = new SuperObject[10];
+    public Entity objects[] = new Entity[10];
     public Entity npcArray[]  = new Entity[10];
     AssetManager assetManager = new AssetManager(this, objects, npcArray);
+    ArrayList<Entity> entityList = new ArrayList<>();
 
 
     // SOUND
@@ -259,36 +263,57 @@ public class GamePanel extends JPanel implements Runnable{
         else {
 
 
+
             // DRAW TILES
             //NOTE** This should be done before drawing the player character so the player character is on top of the tiles
             tileManager.draw(graphics2D);
 
 
-            // DRAW OBJECTS
-            for(int i = 0; i < objects.length; i++){
-                if(objects[i] != null){
-                    objects[i].draw(graphics2D, this);
-                }
-            }
 
+            // ADD ENTITIES TO LIST
+            entityList.add(player);
 
-            // DRAW NPCS
             for(int i = 0; i < npcArray.length; i++){
                 if(npcArray[i] != null){
-                    npcArray[i].draw(graphics2D);
+                    entityList.add(npcArray[i]);
+                }
+            }
+
+            for(int i = 0; i < objects.length; i++){
+                if(objects[i] != null){
+                    entityList.add(objects[i]);
                 }
             }
 
 
 
-            // DRAW PLAYER
-            player.draw(graphics2D);
+            // SORT LIST
+            Collections.sort(entityList, new Comparator<Entity>() {
+                @Override
+                public int compare(Entity entity1, Entity entity2) {
+
+                    int result = Integer.compare(entity1.getWorldY(), entity2.getWorldY());
+
+                    return result;
+                }
+            });
+
+
+
+            // DRAW ENTITIES
+            for(int i = 0; i < entityList.size(); i++){
+                entityList.get(i).draw(graphics2D);
+            }
+
+
+            // RESET LIST
+            for(int i = 0; i < entityList.size(); i++){
+                entityList.remove(i);
+            }
 
 
             // DRAW UI
             userInterface.draw(graphics2D);
-
-
 
         }
 
