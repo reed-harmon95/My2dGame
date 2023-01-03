@@ -5,20 +5,41 @@ import java.awt.*;
 public class EventManager {
 
     GamePanel gamePanel;
-    Rectangle eventCollisionBox;
-    private int eventCollisionDefaultX, eventCollisionDefaultY;
+    EventBox eventCollisionBox[][];
+
+
+    // Resets event once player leaves location
+    int previousEventX, previousEventY;
+    boolean canTouchEvent = true;
+
 
     public EventManager(GamePanel gamePanel){
         this.gamePanel = gamePanel;
 
-        eventCollisionBox = new Rectangle();
-        eventCollisionBox.x = 23;
-        eventCollisionBox.y = 23;
-        eventCollisionBox.width = 2;
-        eventCollisionBox.height = 2;
+        eventCollisionBox = new EventBox[gamePanel.getMaxWorldColumns()][gamePanel.getMaxWorldRows()];
 
-        eventCollisionDefaultX = eventCollisionBox.x;
-        eventCollisionDefaultY = eventCollisionBox.y;
+
+        int column = 0;
+        int row = 0;
+
+        while(column < gamePanel.getMaxWorldColumns() && row < gamePanel.getMaxWorldRows()){
+
+            eventCollisionBox[column][row] = new EventBox();
+            eventCollisionBox[column][row].x = 23;
+            eventCollisionBox[column][row].y = 23;
+            eventCollisionBox[column][row].width = 2;
+            eventCollisionBox[column][row].height = 2;
+
+            eventCollisionBox[column][row].eventBoxDefaultX = eventCollisionBox[column][row].x;
+            eventCollisionBox[column][row].eventBoxDefaultY = eventCollisionBox[column][row].y;
+
+
+            column++;
+            if(column == gamePanel.getMaxWorldColumns()){
+                column = 0;
+                row++;
+            }
+        }
 
 
     }
@@ -27,18 +48,37 @@ public class EventManager {
     public void checkEvent(){
 
 
-        if(triggerEvent(25, 16, "right") == true){
-            // event happens
-            damagePit(gamePanel.dialogueState);
+        // Checking player distance to reset last event (if you want the event to run multiple times)
+        int xDistance = Math.abs(gamePanel.getPlayer().getWorldX() - previousEventX);
+        int yDistance = Math.abs(gamePanel.getPlayer().getWorldY() - previousEventY);
+        int distance = Math.max(xDistance, yDistance);
+        if(distance > gamePanel.getTileSize()){
+            canTouchEvent = true;
         }
-        if(triggerEvent(22, 11, "up") == true){
-            // event happens
-            healingPool(gamePanel.dialogueState);
+
+
+
+
+        if(canTouchEvent == true) {
+
+            if(triggerEvent(25, 16, "right") == true){
+                // event happens
+                damagePit(25, 16, gamePanel.dialogueState);
+            }
+            if(triggerEvent(24, 18, "any") == true){
+                // event happens
+                damagePit(25, 16, gamePanel.dialogueState);
+            }
+            if(triggerEvent(22, 11, "up") == true){
+                // event happens
+                healingPool(22, 11, gamePanel.dialogueState);
+            }
+            if(triggerEvent(20, 18, "any") == true){
+                // event happens
+                teleport(gamePanel.dialogueState);
+            }
         }
-        if(triggerEvent(20, 18, "any") == true){
-            // event happens
-            teleport(gamePanel.dialogueState);
-        }
+
 
     }
 
@@ -59,14 +99,18 @@ public class EventManager {
         gamePanel.getPlayer().collisionBox.y = gamePanel.getPlayer().getWorldY() + gamePanel.getPlayer().collisionBox.y;
 
         // get event collision coords
-        eventCollisionBox.x = (eventCol * gamePanel.getTileSize()) + eventCollisionBox.x;
-        eventCollisionBox.y = (eventRow * gamePanel.getTileSize()) + eventCollisionBox.y;
+        eventCollisionBox[eventCol][eventRow].x = (eventCol * gamePanel.getTileSize()) + eventCollisionBox[eventCol][eventRow].x;
+        eventCollisionBox[eventCol][eventRow].y = (eventRow * gamePanel.getTileSize()) + eventCollisionBox[eventCol][eventRow].y;
 
 
         // check collision
-        if(gamePanel.getPlayer().collisionBox.intersects(eventCollisionBox)){
+        if(gamePanel.getPlayer().collisionBox.intersects(eventCollisionBox[eventCol][eventRow])
+                && eventCollisionBox[eventCol][eventRow].eventDone == false){
             if(gamePanel.getPlayer().getDirection().contentEquals(requiredDirection) || requiredDirection.contentEquals("any")){
                 triggeredEvent = true;
+
+                previousEventX = gamePanel.getPlayer().getWorldX();
+                previousEventY = gamePanel.getPlayer().getWorldY();
             }
         }
 
@@ -74,23 +118,26 @@ public class EventManager {
         // RESET VALUES
         gamePanel.getPlayer().setCollisionBoxX(gamePanel.getPlayer().getCollisionBoxDefaultX());
         gamePanel.getPlayer().setCollisionBoxY(gamePanel.getPlayer().getCollisionBoxDefaultY());
-        eventCollisionBox.x = eventCollisionDefaultX;
-        eventCollisionBox.y = eventCollisionDefaultY;
+        eventCollisionBox[eventCol][eventRow].x = eventCollisionBox[eventCol][eventRow].eventBoxDefaultX;
+        eventCollisionBox[eventCol][eventRow].y = eventCollisionBox[eventCol][eventRow].eventBoxDefaultY;
 
         return triggeredEvent;
     }
 
 
-    public void damagePit( int gameState){
+    public void damagePit( int column, int row, int gameState){
 
         // The idea is to change to dialogue state to display the text to the screen when the user falls into the pit
         gamePanel.setGameState(gameState);
         gamePanel.getUserInterface().setDisplayDialogue("You fall into a pit");
         gamePanel.getPlayer().setCurrentLife(gamePanel.getPlayer().getCurrentLife() - 1);
+        eventCollisionBox[column][row].eventDone = true;
+
+        canTouchEvent = false;
     }
 
 
-    public void healingPool(int gameState) {
+    public void healingPool(int column, int row, int gameState) {
 
 
         if(gamePanel.getPlayerController().isEnteredPressed() == true){
@@ -113,25 +160,4 @@ public class EventManager {
     }
 
 
-
-    public Rectangle getEventCollisionBox() {
-        return eventCollisionBox;
-    }
-
-
-    public int getEventCollisionDefaultX() {
-        return eventCollisionDefaultX;
-    }
-
-    public void setEventCollisionDefaultX(int eventCollisionDefaultX) {
-        this.eventCollisionDefaultX = eventCollisionDefaultX;
-    }
-
-    public int getEventCollisionDefaultY() {
-        return eventCollisionDefaultY;
-    }
-
-    public void setEventCollisionDefaultY(int eventCollisionDefaultY) {
-        this.eventCollisionDefaultY = eventCollisionDefaultY;
-    }
 }
