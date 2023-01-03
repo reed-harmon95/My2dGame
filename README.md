@@ -76,4 +76,13 @@ Currently implemented:
     
             - Added main menu screen that loads before the game starts
                     - Main menu screen "load game" option does not currently work as load functionality is not currently implemented
+                    
+                                     
+    1/2:
+    
+            - Added events to the game so that player can trigger random events when entering a tile
+                    - Events added:
+                                    - Damage Pit
+                                    - Healing Pool
+                                    - Teleport
 
