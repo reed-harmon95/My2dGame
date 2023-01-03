@@ -14,11 +14,11 @@ public class AssetManager {
 
 
     private GamePanel gamePanel;
-    private SuperObject[] objectsArray;
+    private Entity[] objectsArray;
     private Entity[] npcArray;
 
 
-    public AssetManager(GamePanel gamePanel, SuperObject[] objects, Entity[] npcArray){
+    public AssetManager(GamePanel gamePanel, Entity[] objects, Entity[] npcArray){
         this.gamePanel = gamePanel;
         this.objectsArray = objects;
         this.npcArray = npcArray;
@@ -35,7 +35,7 @@ public class AssetManager {
      *
      * @return      - This returns the newly updated list of the game objects within the game
      */
-    public SuperObject[] setObject() {
+    public Entity[] setObject() {
 
         // KEYS
         objectsArray[0] = new Object_Key(gamePanel);
@@ -84,6 +84,14 @@ public class AssetManager {
         npcArray[0] = new NPC_OldMan(gamePanel);
         npcArray[0].setWorldX(gamePanel.getTileSize()*38);
         npcArray[0].setWorldY(gamePanel.getTileSize()*12);
+
+        npcArray[1] = new NPC_OldMan(gamePanel);
+        npcArray[1].setWorldX(gamePanel.getTileSize()*17);
+        npcArray[1].setWorldY(gamePanel.getTileSize()*21);
+
+        npcArray[2] = new NPC_OldMan(gamePanel);
+        npcArray[2].setWorldX(gamePanel.getTileSize()*15);
+        npcArray[2].setWorldY(gamePanel.getTileSize()*21);
 
         return npcArray;
     }

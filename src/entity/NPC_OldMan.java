@@ -25,6 +25,9 @@ public class NPC_OldMan extends Entity{
         speed = 1;
         name = "Old Man";
 
+
+
+
         getPlayerImages();
         setDialogue();
     }

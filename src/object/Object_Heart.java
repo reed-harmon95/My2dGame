@@ -1,29 +1,27 @@
 package object;
 
+import entity.Entity;
 import main.GamePanel;
 
 import javax.imageio.ImageIO;
+import java.io.File;
 import java.io.IOException;
 
-public class Object_Heart extends SuperObject {
+public class Object_Heart extends Entity {
 
     public Object_Heart(GamePanel gamePanel) {
+       super(gamePanel);
         name = "Heart";
 
-        try{
 
-            // get the three different types of heart images
-            image = ImageIO.read(getClass().getResourceAsStream("/images/objects/heart_full.png"));
-            image = utilityTool.scaleImage(image, gamePanel.getTileSize(), gamePanel.getTileSize());
+        File fileName = new File("res/images/objects/heart_full.png");
+        image = instantiateImages(fileName);
 
-            image2 = ImageIO.read(getClass().getResourceAsStream("/images/objects/heart_half.png"));
-            image2 = utilityTool.scaleImage(image2, gamePanel.getTileSize(), gamePanel.getTileSize());
+        fileName = new File("res/images/objects/heart_half.png");
+        image2 = instantiateImages(fileName);
 
-            image3 = ImageIO.read(getClass().getResourceAsStream("/images/objects/heart_blank.png"));
-            image3 = utilityTool.scaleImage(image3, gamePanel.getTileSize(), gamePanel.getTileSize());
+        fileName = new File("res/images/objects/heart_blank.png");
+        image3 = instantiateImages(fileName);
 
-        } catch (IOException e){
-            e.printStackTrace();
-        }
     }
 }

@@ -25,7 +25,7 @@ public abstract class Entity {
     //IMAGE AND ANIMATION DATA
     //NOTE** Change to array when I have time
     protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;        //creates buffered images to hold walking animation images
-    protected String direction;                                                          //holds the direction the entity is facing in order to load the correct image array
+    protected String direction = "down";                                                          //holds the direction the entity is facing in order to load the correct image array
     protected int spriteCounter = 0;
     protected int spriteNumber = 1;
     protected int actionCounter = 0;
@@ -46,6 +46,11 @@ public abstract class Entity {
     // CHARACTER STATUS
     protected int maxLife;
     protected int currentLife;
+
+
+    // OBJECTS
+    protected BufferedImage image, image2, image3;
+    protected boolean collision = false;
 
 
     protected GamePanel gamePanel;
@@ -333,5 +338,31 @@ public abstract class Entity {
         this.currentLife = currentLife;
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
 
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
+    public BufferedImage getImage2() {
+        return image2;
+    }
+
+    public void setImage2(BufferedImage image2) {
+        this.image2 = image2;
+    }
+
+    public BufferedImage getImage3() {
+        return image3;
+    }
+
+    public void setImage3(BufferedImage image3) {
+        this.image3 = image3;
+    }
+
+    public boolean hasCollision() {
+        return collision;
+    }
 }
