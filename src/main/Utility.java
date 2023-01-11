@@ -24,6 +24,26 @@ public class Utility {
     }
 
 
+    public void calculateDamage(String name, GamePanel gamePanel){
+        switch(name){
+
+            case "Green Slime":
+                if(gamePanel.getPlayer().currentLife > 1){
+                    gamePanel.getPlayer().currentLife -= 1;
+                    gamePanel.getPlayer().isInvincible = true;
+                }
+
+                break;
+            case "Blue Slime":
+
+                if(gamePanel.getPlayer().currentLife > 2){
+                    gamePanel.getPlayer().currentLife -= 2;
+                    gamePanel.getPlayer().isInvincible = true;
+                }
+                gamePanel.getPlayer().knockBack();
+                break;
+        }
+    }
 
 
 }

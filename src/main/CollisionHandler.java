@@ -285,60 +285,32 @@ public class CollisionHandler {
                     case "up":
 
                         entity.setCollisionBoxY(entity.getCollisionBox().y - entity.getSpeed());
-                        if(entity.getCollisionBox().intersects(target[i].getCollisionBox()) ){
-                            if(entity.isPlayer()) {
-                                System.out.println("Up collision with " + target[i].getName());
-                            }
-                                entity.setCollisionOn(true);
-                                index = i;
-
-                        }
                         break;
 
 
                     case "down":
 
                         entity.setCollisionBoxY(entity.getCollisionBox().y + entity.getSpeed());
-                        if(entity.getCollisionBox().intersects(target[i].getCollisionBox()) ){
-                            if(entity.isPlayer()) {
-                                System.out.println("Down collision with " + target[i].getName());
-                            }
-
-                                entity.setCollisionOn(true);
-                                index = i;
-
-                        }
                         break;
 
 
                     case "left":
 
                         entity.setCollisionBoxX(entity.getCollisionBox().x - entity.getSpeed());
-                        if(entity.getCollisionBox().intersects(target[i].getCollisionBox())){
-                            if(entity.isPlayer()) {
-                                System.out.println("Left collision with " + target[i].getName());
-                            }
-
-                                entity.setCollisionOn(true);
-                                index = i;
-
-                        }
                         break;
 
                     case "right":
 
                         entity.setCollisionBoxX(entity.getCollisionBox().x + entity.getSpeed());
-                        if(entity.getCollisionBox().intersects(target[i].getCollisionBox())){
-                            if(entity.isPlayer()) {
-                                System.out.println("Right collision with " + target[i].getName());
-                            }
-
-                                entity.setCollisionOn(true);
-                                index = i;
-                        }
                         break;
                 }
 
+                if(entity.getCollisionBox().intersects(target[i].getCollisionBox()) ){
+                    if(target[i] != entity) {
+                        entity.setCollisionOn(true);
+                        index = i;
+                    }
+                }
 
                 // Reset values collision boxes
                 entity.setCollisionBoxX(entity.getCollisionBoxDefaultX());
@@ -361,8 +333,9 @@ public class CollisionHandler {
      *
      * @param entity        - Entity that is being checked for movement
      */
-    public void checkNpcCollisionWithPlayer(Entity entity){
+    public boolean checkNpcCollisionWithPlayer(Entity entity){
 
+        boolean hitPlayer = false;
 
         //get entity's collision box location
         entity.setCollisionBoxX(entity.getWorldX() + entity.getCollisionBox().x);
@@ -378,38 +351,29 @@ public class CollisionHandler {
             case "up":
 
                 entity.setCollisionBoxY(entity.getCollisionBox().y - entity.getSpeed());
-                if(entity.getCollisionBox().intersects(gamePanel.getPlayer().getCollisionBox()) ){
-                    entity.setCollisionOn(true);
-
-                }
                 break;
 
 
             case "down":
 
                 entity.setCollisionBoxY(entity.getCollisionBox().y + entity.getSpeed());
-                if(entity.getCollisionBox().intersects(gamePanel.getPlayer().getCollisionBox()) ){
-                    entity.setCollisionOn(true);
-
-                }
                 break;
 
 
             case "left":
 
                 entity.setCollisionBoxX(entity.getCollisionBox().x - entity.getSpeed());
-                if(entity.getCollisionBox().intersects(gamePanel.getPlayer().getCollisionBox())){
-                    entity.setCollisionOn(true);
-                }
                 break;
 
             case "right":
 
                 entity.setCollisionBoxX(entity.getCollisionBox().x + entity.getSpeed());
-                if(entity.getCollisionBox().intersects(gamePanel.getPlayer().getCollisionBox())){
-                    entity.setCollisionOn(true);
-                }
                 break;
+        }
+
+        if(entity.getCollisionBox().intersects(gamePanel.getPlayer().getCollisionBox()) ){
+            entity.setCollisionOn(true);
+            hitPlayer = true;
         }
 
 
@@ -419,6 +383,8 @@ public class CollisionHandler {
 
         gamePanel.getPlayer().setCollisionBoxX(gamePanel.getPlayer().getCollisionBoxDefaultX());
         gamePanel.getPlayer().setCollisionBoxY(gamePanel.getPlayer().getCollisionBoxDefaultY());
+
+        return hitPlayer;
     }
 
 }

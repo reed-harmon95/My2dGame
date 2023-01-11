@@ -1,5 +1,7 @@
 package main;
 
+import enemy.Enemy_BlueSlime;
+import enemy.Enemy_GreenSlime;
 import entity.Entity;
 import entity.NPC_OldMan;
 import object.*;
@@ -16,12 +18,14 @@ public class AssetManager {
     private GamePanel gamePanel;
     private Entity[] objectsArray;
     private Entity[] npcArray;
+    private Entity[] enemyArray;
 
 
-    public AssetManager(GamePanel gamePanel, Entity[] objects, Entity[] npcArray){
+    public AssetManager(GamePanel gamePanel, Entity[] objects, Entity[] npcArray, Entity[] enemyArray){
         this.gamePanel = gamePanel;
         this.objectsArray = objects;
         this.npcArray = npcArray;
+        this.enemyArray = enemyArray;
     }
 
 
@@ -85,14 +89,26 @@ public class AssetManager {
         npcArray[0].setWorldX(gamePanel.getTileSize()*38);
         npcArray[0].setWorldY(gamePanel.getTileSize()*12);
 
-        npcArray[1] = new NPC_OldMan(gamePanel);
-        npcArray[1].setWorldX(gamePanel.getTileSize()*17);
-        npcArray[1].setWorldY(gamePanel.getTileSize()*21);
-
-        npcArray[2] = new NPC_OldMan(gamePanel);
-        npcArray[2].setWorldX(gamePanel.getTileSize()*15);
-        npcArray[2].setWorldY(gamePanel.getTileSize()*21);
-
         return npcArray;
     }
+
+    public Entity[] setEnemy() {
+
+        enemyArray[0] = new Enemy_GreenSlime(gamePanel);
+        enemyArray[0].setWorldX(gamePanel.getTileSize() * 23);
+        enemyArray[0].setWorldY(gamePanel.getTileSize() * 36);
+
+        enemyArray[1] = new Enemy_GreenSlime(gamePanel);
+        enemyArray[1].setWorldX(gamePanel.getTileSize() * 24);
+        enemyArray[1].setWorldY(gamePanel.getTileSize() * 36);
+
+        enemyArray[4] = new Enemy_BlueSlime(gamePanel);
+        enemyArray[4].setWorldX(gamePanel.getTileSize() * 25);
+        enemyArray[4].setWorldY(gamePanel.getTileSize() * 38);
+
+
+
+        return enemyArray;
+    }
+
 }
