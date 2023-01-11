@@ -56,7 +56,8 @@ public class GamePanel extends JPanel implements Runnable{
     // GAME OBJECTS / ENTITY
     public Entity objects[] = new Entity[10];
     public Entity npcArray[]  = new Entity[10];
-    AssetManager assetManager = new AssetManager(this, objects, npcArray);
+    public Entity enemyArray[] = new Entity[10];
+    AssetManager assetManager = new AssetManager(this, objects, npcArray, enemyArray);
     ArrayList<Entity> entityList = new ArrayList<>();
 
 
@@ -115,6 +116,14 @@ public class GamePanel extends JPanel implements Runnable{
         // Set up NPCs to game map
         npcArray = assetManager.setNPC();
 
+        // Set up enemy
+        enemyArray = assetManager.setEnemy();
+
+        for(int i = 0; i < enemyArray.length; i++){
+            if(enemyArray[i] != null){
+                System.out.println(enemyArray[i].getName());
+            }
+        }
 
         // Play background music
         //playBackgroundMusic(0);
@@ -209,13 +218,26 @@ public class GamePanel extends JPanel implements Runnable{
         // checking the state of the game
         if(gameState == playState){
 
-            //Update the players position based on the keyboard input
+
+            // UPDATE PLAYER
             player.update();
 
+
+            // UPDATE NPC
             for(int i = 0; i < npcArray.length; i++){
 
                 if(npcArray[i] != null){
                     npcArray[i].update();
+                }
+
+            }
+
+
+            // UPDATE ENEMY
+            for(int i = 0; i < enemyArray.length; i++){
+
+                if(enemyArray[i] != null){
+                    enemyArray[i].update();
                 }
 
             }
@@ -273,15 +295,25 @@ public class GamePanel extends JPanel implements Runnable{
             // ADD ENTITIES TO LIST
             entityList.add(player);
 
+
+
             for(int i = 0; i < npcArray.length; i++){
                 if(npcArray[i] != null){
                     entityList.add(npcArray[i]);
                 }
             }
 
+
+
             for(int i = 0; i < objects.length; i++){
                 if(objects[i] != null){
                     entityList.add(objects[i]);
+                }
+            }
+
+            for(int i = 0; i < enemyArray.length; i++){
+                if(enemyArray[i] != null){
+                    entityList.add(enemyArray[i]);
                 }
             }
 

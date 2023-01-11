@@ -28,6 +28,7 @@ public class Player extends Entity {
 
 
 
+
     /**
      * This is the constructor for the Player class. It uses an instance of the GamePanel class to implement the update
      * and draw methods to handle all data and drawing of the player instead of doing all that within the GamePanel class itself.
@@ -121,6 +122,11 @@ public class Player extends Entity {
             int npcIndex = gamePanel.getCollisionHandler().checkEntityCollision(this, gamePanel.npcArray);
             interactNPC(npcIndex);
 
+            // check enemy collision
+            int enemyIndex = gamePanel.getCollisionHandler().checkEntityCollision(this, gamePanel.enemyArray);
+            interactEnemy(enemyIndex);
+
+
 
             // check event collision
             gamePanel.getEventManager().checkEvent();
@@ -158,6 +164,15 @@ public class Player extends Entity {
         }
 
 
+        // Invincibility Counter
+        if(isInvincible){
+            invincibleCounter++;
+
+            if(invincibleCounter > 60){
+                invincibleCounter = 0;
+                isInvincible = false;
+            }
+        }
     }
 
 
@@ -211,12 +226,18 @@ public class Player extends Entity {
                 break;
         }
 
-
+        // visual effect for invincibility
+        if(isInvincible){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+        }
 
         //Finally, draw image to screen
         graphics2D.drawImage(image, screenX, screenY, null);
 
-
+        // reset to normal
+        if(!isInvincible){
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        }
 
 
 
@@ -316,6 +337,142 @@ public class Player extends Entity {
         }
     }
 
+
+    public void interactEnemy(int index){
+
+        if(index != 999){
+
+            String enemyName = gamePanel.enemyArray[index].getName();
+
+            if(isInvincible == false){
+                utility.calculateDamage(enemyName, gamePanel);
+            }
+        }
+    }
+
+
+    public void knockBack(){
+        switch (this.direction){
+            case "up":
+                if(checkKnockBackOB()){
+                    worldY += gamePanel.getTileSize();
+                }
+
+                break;
+            case "down":
+                if(checkKnockBackOB()){
+                    worldY -= gamePanel.getTileSize();
+                }
+
+                break;
+            case "left":
+                if(checkKnockBackOB()){
+                    worldX += gamePanel.getTileSize();
+                }
+
+                break;
+            case "right":
+                if(checkKnockBackOB()){
+                    worldX -= gamePanel.getTileSize();
+                }
+
+                break;
+
+        }
+    }
+
+
+    /** FIX THIS **/
+    public boolean checkKnockBackOB(){
+
+        // use these to find col and row values
+        int entityLeftX = this.getWorldX() + this.getCollisionBox().x;
+        int entityRightX = this.getWorldX() + this.getCollisionBox().x + this.getCollisionBox().width;
+        int entityTopY = this.getWorldY() + this.getCollisionBox().y;
+        int entityBottomY = this.getWorldY() + this.getCollisionBox().y + this.getCollisionBox().height;
+
+
+        // getting the specific tile(s) the collision box is on
+        int entityLeftColumn = entityLeftX / gamePanel.getTileSize();
+        int entityRightColumn = entityRightX / gamePanel.getTileSize();
+        int entityTopRow = entityTopY / gamePanel.getTileSize();
+        int entityBottomRow = entityBottomY / gamePanel.getTileSize();
+
+
+        // this is to check if the entity is colliding with the 1 or 2 tiles it is moving into
+        int tile1, tile2;
+
+        switch (this.getDirection()){
+            case "up":
+
+                entityTopRow = (entityTopY - this.getSpeed()) / gamePanel.getTileSize();
+
+                //find the int value of the tiles the player is launched into
+                tile1 = gamePanel.getTileManager().getMapTileNumbers()[entityLeftColumn][entityTopRow + 1];
+                tile2 = gamePanel.getTileManager().getMapTileNumbers()[entityRightColumn][entityTopRow + 1];
+
+                // if the int values of the tiles have collision
+                // do not do knock back
+                if(gamePanel.getTileManager().getTileSetList()[tile1].isCollision() == true ||
+                        gamePanel.getTileManager().getTileSetList()[tile2].isCollision() == true ) {
+                    return false;
+                }
+                break;
+
+            case "down":
+
+
+                entityBottomRow = (entityBottomY + this.getSpeed()) / gamePanel.getTileSize();
+
+                //find the int value of the tiles the player is moving into
+                tile1 = gamePanel.getTileManager().getMapTileNumbers()[entityLeftColumn][entityBottomRow - 1];
+                tile2 = gamePanel.getTileManager().getMapTileNumbers()[entityRightColumn][entityBottomRow - 1];
+
+                //if the int values of the tiles have collision
+                //set the collision on entity
+                if(gamePanel.getTileManager().getTileSetList()[tile1].isCollision() == true ||
+                        gamePanel.getTileManager().getTileSetList()[tile2].isCollision() == true) {
+                    return false;
+                }
+                break;
+
+            case "left":
+
+
+                entityLeftColumn = (entityLeftX - this.getSpeed()) / gamePanel.getTileSize();
+
+                //find the int value of the tiles the player is moving into
+                tile1 = gamePanel.getTileManager().getMapTileNumbers()[entityLeftColumn + 1][entityTopRow];
+                tile2 = gamePanel.getTileManager().getMapTileNumbers()[entityLeftColumn + 1][entityBottomRow];
+
+                //if the int values of the tiles have collision
+                //set the collision on entity
+                if(gamePanel.getTileManager().getTileSetList()[tile1].isCollision() == true ||
+                        gamePanel.getTileManager().getTileSetList()[tile2].isCollision() == true) {
+                    return false;
+                }
+                break;
+
+            case "right":
+
+
+                entityRightColumn = (entityRightX + this.getSpeed()) / gamePanel.getTileSize();
+
+                //find the int value of the tiles the player is moving into
+                tile1 = gamePanel.getTileManager().getMapTileNumbers()[entityRightColumn - 1][entityTopRow];
+                tile2 = gamePanel.getTileManager().getMapTileNumbers()[entityRightColumn - 1][entityBottomRow];
+
+                //if the int values of the tiles have collision
+                //set the collision on entity
+                if(gamePanel.getTileManager().getTileSetList()[tile1].isCollision() == true ||
+                        gamePanel.getTileManager().getTileSetList()[tile2].isCollision() == true) {
+                    return false;
+                }
+                break;
+        }
+
+        return true;
+    }
 
 
     /**

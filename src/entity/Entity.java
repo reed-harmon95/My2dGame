@@ -36,6 +36,10 @@ public abstract class Entity {
     public Rectangle collisionBox = new Rectangle(0,0,48,48);
     protected boolean collisionOn = false;
     protected int CollisionBoxDefaultX, CollisionBoxDefaultY;                           // these are used to reset the default x/y values of the collision box for an entity when interacting with an object
+    public boolean isInvincible = false;
+    protected int invincibleCounter = 0;
+    protected int entityType;
+    Utility utility;
 
 
     // DIALOGUE
@@ -44,8 +48,8 @@ public abstract class Entity {
 
 
     // CHARACTER STATUS
-    protected int maxLife;
-    protected int currentLife;
+    public int maxLife;
+    public int currentLife;
 
 
     // OBJECTS
@@ -57,6 +61,7 @@ public abstract class Entity {
 
     public Entity(GamePanel gamePanel){
         this.gamePanel = gamePanel;
+        this.utility = new Utility();
     }
 
 
@@ -125,8 +130,15 @@ public abstract class Entity {
         collisionOn = false;
         gamePanel.getCollisionHandler().checkTileCollision(this);
         gamePanel.getCollisionHandler().checkObjectCollision(this, false);
-        gamePanel.getCollisionHandler().checkNpcCollisionWithPlayer(this);
+        gamePanel.getCollisionHandler().checkEntityCollision(this, gamePanel.npcArray);
+        gamePanel.getCollisionHandler().checkEntityCollision(this, gamePanel.enemyArray);
+        boolean hitPlayer = gamePanel.getCollisionHandler().checkNpcCollisionWithPlayer(this);
 
+        if(this.entityType == 2 && hitPlayer){
+            if(gamePanel.getPlayer().isInvincible == false){
+                utility.calculateDamage(this.name, gamePanel);
+            }
+        }
         //if collision false, continue moving
         if(collisionOn == false){
 
